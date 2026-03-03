@@ -1,0 +1,16 @@
+{
+  "chart_id": "ccf_barplot",
+  "title": "Credit-Equity Information Flow Peaks Contemporaneously",
+  "caption": "Peak correlation at lag 0; modest credit-leading signal at lags -1 to -3 (red = significant).",
+  "description": "Cross-correlation function of HY-IG spread changes and SPY returns at lags -20 to +20.",
+  "source": "results/exploratory_20260228/ccf.csv",
+  "audience_tier": "analytical",
+  "portal_page": 3,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/exploratory_20260228/ccf.csv",
+  "static_fallback_identical": true
+}

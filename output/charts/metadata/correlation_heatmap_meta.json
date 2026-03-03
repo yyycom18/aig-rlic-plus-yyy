@@ -1,0 +1,16 @@
+{
+  "chart_id": "correlation_heatmap",
+  "title": "Credit Spread Signals Show Strongest Correlation at Medium Horizons",
+  "caption": "Momentum and z-score signals peak at 63d-126d horizons with correlations of -0.15 to -0.20.",
+  "description": "Heatmap of Pearson correlations between HY-IG signal variants and forward SPY returns.",
+  "source": "results/exploratory_20260228/correlations.csv",
+  "audience_tier": "analytical",
+  "portal_page": 3,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/exploratory_20260228/correlations.csv",
+  "static_fallback_identical": true
+}

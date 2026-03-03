@@ -1,0 +1,10 @@
+{
+  "chart_id": "kpi_data",
+  "title": "Executive KPI Metrics",
+  "caption": "Key performance indicators for the HMM Long/Cash strategy vs buy-and-hold SPY.",
+  "source": "results/tournament_results_20260228.csv",
+  "audience_tier": "exec",
+  "portal_page": 1,
+  "interactive_controls": [],
+  "static_fallback_identical": true
+}

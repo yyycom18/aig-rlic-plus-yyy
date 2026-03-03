@@ -1,0 +1,106 @@
+/* AIG-RLIC+ Portal Styles */
+
+/* Readable text blocks */
+.narrative-block {
+    max-width: 800px;
+    line-height: 1.7;
+    font-size: 1.05rem;
+    color: #333;
+}
+
+.narrative-block p {
+    margin-bottom: 1rem;
+}
+
+/* KPI card styling */
+div[data-testid="stMetric"] {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+div[data-testid="stMetric"] label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1f77b4;
+}
+
+/* Section dividers */
+.section-divider {
+    border-top: 2px solid #e9ecef;
+    margin: 2rem 0;
+}
+
+/* Caveat box styling */
+div[data-testid="stAlert"] {
+    border-radius: 8px;
+}
+
+/* Footer */
+.portal-footer {
+    text-align: center;
+    color: #999;
+    font-size: 0.85rem;
+    padding: 2rem 0 1rem 0;
+    border-top: 1px solid #eee;
+    margin-top: 3rem;
+}
+
+/* Strategy spotlight card */
+.spotlight-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-left: 4px solid #1f77b4;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+/* Tab content spacing */
+div[data-testid="stTab"] {
+    padding-top: 1rem;
+}
+
+/* Expander styling */
+details summary {
+    font-weight: 600;
+    color: #1f77b4;
+    cursor: pointer;
+}
+
+/* Chart caption */
+.chart-caption {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+    margin-top: -0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Methodology table styling */
+.method-table {
+    font-size: 0.95rem;
+}
+
+/* Reference list */
+.reference-list {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #444;
+}
+
+/* Transition text between sections */
+.transition-text {
+    font-style: italic;
+    color: #555;
+    border-left: 3px solid #1f77b4;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+}

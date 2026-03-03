@@ -1,0 +1,17 @@
+{
+  "chart_id": "hmm_regime_probs",
+  "title": "Hidden Markov Model Identifies Stress Regimes in Real Time",
+  "caption": "HMM stress probability spikes to near 1.0 during GFC, COVID, and 2022, preceding or coinciding with drawdowns.",
+  "description": "2-state HMM stress probability (left) overlaid with SPY price (right).",
+  "source": "results/core_models_20260228/hmm_states_2state.parquet",
+  "audience_tier": "analytical",
+  "portal_page": 3,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover",
+    "date_range_slider"
+  ],
+  "data_source_path": "results/core_models_20260228/hmm_states_2state.parquet",
+  "static_fallback_identical": true
+}

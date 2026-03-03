@@ -1,0 +1,16 @@
+{
+  "chart_id": "stationarity_table",
+  "title": "Stationarity Tests Confirm Near-Unit-Root Behavior in Credit Spreads",
+  "caption": "HY-IG spread levels show near-unit-root behavior; spread changes are stationary.",
+  "description": "ADF and KPSS test results for all series. Green = stationary, red = non-stationary.",
+  "source": "results/stationarity_tests_20260228.csv",
+  "audience_tier": "technical",
+  "portal_page": 5,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/stationarity_tests_20260228.csv",
+  "static_fallback_identical": true
+}

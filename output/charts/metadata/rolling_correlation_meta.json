@@ -1,0 +1,17 @@
+{
+  "chart_id": "rolling_correlation",
+  "title": "The Credit-Equity Relationship Intensifies During Crises",
+  "caption": "Correlation spikes from ~-0.2 to below -0.6 during the GFC and COVID crises.",
+  "description": "Time series of rolling 1-year Pearson correlation between HY-IG spread changes and SPY returns.",
+  "source": "results/exploratory_20260228/rolling_252d_correlation.csv",
+  "audience_tier": "narrative",
+  "portal_page": 2,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover",
+    "date_range_slider"
+  ],
+  "data_source_path": "results/exploratory_20260228/rolling_252d_correlation.csv",
+  "static_fallback_identical": true
+}

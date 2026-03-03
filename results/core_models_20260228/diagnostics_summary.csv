@@ -1,0 +1,10 @@
+model,test,statistic,p_value,interpretation
+Johansen Cointegration,Trace (r=0),18.022596651045724,,Reject
+Markov-Switching 2S,AIC,-45027.70360063258,,2-state model AIC
+Markov-Switching 3S,AIC,-45606.833264850786,,3-state model AIC
+GJR-GARCH,Log-Likelihood,-8283.037028733512,,Model fit
+GJR-GARCH,AIC,16580.074057467024,,Model complexity
+LP h=21,Jarque-Bera,15562.702971567944,0.0,Non-normal
+LP h=21,Breusch-Pagan,390.3596523684487,2.711810499727224e-84,Heteroskedastic
+LP h=21,Breusch-Godfrey,5866.075273169527,0.0,Serial correlation
+LP h=21,RESET,32.83346229563872,6.439293542825908e-15,Misspecified

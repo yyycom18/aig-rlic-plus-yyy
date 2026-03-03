@@ -1,0 +1,16 @@
+{
+  "chart_id": "granger_table",
+  "title": "Bidirectional Causality: Credit Leads Equity Only During Stress",
+  "caption": "Credit-to-equity causality is significant during stress but not during calm periods.",
+  "description": "Toda-Yamamoto Granger causality tests. Green = significant at 5%; yellow = 10%.",
+  "source": "results/core_models_20260228/granger_causality.csv",
+  "audience_tier": "technical",
+  "portal_page": 5,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/core_models_20260228/granger_causality.csv",
+  "static_fallback_identical": true
+}

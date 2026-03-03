@@ -1,0 +1,5 @@
+direction,lag,transfer_entropy,bootstrap_p,significant
+Credit->Equity,1,0.012240786986580604,0.0,True
+Equity->Credit,1,0.020941204434586656,0.0,True
+Credit->Equity,5,0.009161738185641113,0.0,True
+Equity->Credit,5,0.007849725952113652,0.037,True

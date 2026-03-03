@@ -1,0 +1,16 @@
+{
+  "chart_id": "tournament_leaderboard",
+  "title": "Tournament Leaderboard: Top 20 Strategies by OOS Sharpe",
+  "caption": "HMM Long/Cash (Sharpe 1.17) tops the leaderboard; Long/Cash dominates all top positions.",
+  "description": "Top 20 strategies from the 2,304-combination tournament, ranked by OOS Sharpe ratio.",
+  "source": "results/tournament_results_20260228.csv",
+  "audience_tier": "analytical",
+  "portal_page": 4,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/tournament_results_20260228.csv",
+  "static_fallback_identical": true
+}

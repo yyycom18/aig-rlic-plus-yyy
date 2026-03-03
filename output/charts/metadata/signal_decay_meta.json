@@ -1,0 +1,16 @@
+{
+  "chart_id": "signal_decay",
+  "title": "Signal Value Decays with Execution Delay \u2014 Same-Day Execution is Critical",
+  "caption": "A 1-day delay costs 0.15-0.25 Sharpe; 5-day delay erodes most of the advantage over B&H.",
+  "description": "OOS Sharpe vs execution delay for top-5 strategies.",
+  "source": "results/tournament_validation_20260228/signal_decay.csv",
+  "audience_tier": "analytical",
+  "portal_page": 4,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/tournament_validation_20260228/signal_decay.csv",
+  "static_fallback_identical": true
+}

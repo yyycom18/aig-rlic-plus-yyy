@@ -1,0 +1,10 @@
+{
+  "oos_sharpe": 1.17,
+  "max_dd_strategy": -11.6,
+  "max_dd_benchmark": -33.7,
+  "tournament_combos_tested": 2304,
+  "citations": 25,
+  "oos_period": "2018-2025",
+  "tournament_valid": 1149,
+  "benchmark_sharpe": 0.77
+}

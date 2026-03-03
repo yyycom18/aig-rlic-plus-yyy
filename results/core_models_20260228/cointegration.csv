@@ -1,0 +1,3 @@
+null_hypothesis,trace_stat,trace_cv_5pct,trace_reject,max_eigen_stat,max_eigen_cv_5pct,max_eigen_reject
+r <= 0,18.022596651045724,15.4943,True,16.617999147720568,14.2639,True
+r <= 1,1.4045975033251588,3.8415,False,1.4045975033251588,3.8415,False

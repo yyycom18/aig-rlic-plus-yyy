@@ -1,0 +1,16 @@
+{
+  "chart_id": "walk_forward_sharpe",
+  "title": "Walk-Forward Sharpe Shows Consistent Outperformance Except During Rate Shocks",
+  "caption": "W1 and W2 outperform buy-and-hold in most years, with the notable exception of 2022.",
+  "description": "Annual Sharpe for W1, W2, and buy-and-hold from walk-forward validation.",
+  "source": "results/tournament_validation_20260228/walk_forward.csv",
+  "audience_tier": "analytical",
+  "portal_page": 4,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/tournament_validation_20260228/walk_forward.csv",
+  "static_fallback_identical": true
+}

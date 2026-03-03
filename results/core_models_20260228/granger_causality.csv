@@ -1,0 +1,25 @@
+direction,lag_order,d_max,total_lags,regime,n_obs,test_stat,p_value,conclusion
+Credit->Equity,1,1,2,full_sample,6782,9.20788713443661,0.010012273713742772,Reject H0 (causal)
+Equity->Credit,1,1,2,full_sample,6782,216.02559348255127,1.2320785601631192e-47,Reject H0 (causal)
+Credit->Equity,5,1,6,full_sample,6782,17.273215611679174,0.008329883379484879,Reject H0 (causal)
+Equity->Credit,5,1,6,full_sample,6782,243.89167421348353,8.279845725311611e-50,Reject H0 (causal)
+Credit->Equity,10,1,11,full_sample,6782,22.062526433895812,0.023893292943707182,Reject H0 (causal)
+Equity->Credit,10,1,11,full_sample,6782,258.678320853121,4.2452237138922595e-49,Reject H0 (causal)
+Credit->Equity,21,1,22,full_sample,6782,35.06815610149278,0.038114431969251614,Reject H0 (causal)
+Equity->Credit,21,1,22,full_sample,6782,298.60685308605724,2.339742343818869e-50,Reject H0 (causal)
+Credit->Equity,1,1,2,stress,1696,13.689903377476817,0.001064817678110704,Reject H0 (causal)
+Equity->Credit,1,1,2,stress,1696,70.22449620173171,5.635655047918603e-16,Reject H0 (causal)
+Credit->Equity,5,1,6,stress,1696,22.593973764261463,0.000944519482049136,Reject H0 (causal)
+Equity->Credit,5,1,6,stress,1696,82.72891598562491,9.74673982827959e-16,Reject H0 (causal)
+Credit->Equity,10,1,11,stress,1696,28.88742389224998,0.0023630493034251777,Reject H0 (causal)
+Equity->Credit,10,1,11,stress,1696,86.5516051998543,7.87515318268596e-14,Reject H0 (causal)
+Credit->Equity,21,1,22,stress,1696,37.00628567464007,0.023618300120755612,Reject H0 (causal)
+Equity->Credit,21,1,22,stress,1696,95.27336497113734,4.273298029226484e-11,Reject H0 (causal)
+Credit->Equity,1,1,2,calm,5086,3.9936640686090468,0.13576470060189882,Fail to reject H0
+Equity->Credit,1,1,2,calm,5086,124.55424498743244,8.982337149752947e-28,Reject H0 (causal)
+Credit->Equity,5,1,6,calm,5086,6.1098644836962075,0.4109962983407028,Fail to reject H0
+Equity->Credit,5,1,6,calm,5086,125.93169960808747,9.23105552487317e-25,Reject H0 (causal)
+Credit->Equity,10,1,11,calm,5086,9.258193262332872,0.5980732471648886,Fail to reject H0
+Equity->Credit,10,1,11,calm,5086,127.732030036358,5.004910037625123e-22,Reject H0 (causal)
+Credit->Equity,21,1,22,calm,5086,15.041656069755096,0.8604441085229894,Fail to reject H0
+Equity->Credit,21,1,22,calm,5086,138.21439509137198,7.749665127325208e-19,Reject H0 (causal)

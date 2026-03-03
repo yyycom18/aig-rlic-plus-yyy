@@ -1,0 +1,17 @@
+{
+  "chart_id": "change_points",
+  "title": "Statistical Change Points Align with Known Market Events",
+  "caption": "48 PELT change points cluster around known crises (GFC, COVID, 2022), validating data and methodology.",
+  "description": "HY-IG spread with PELT change points. Green = matches Ray's event timeline; purple = unmatched.",
+  "source": "results/core_models_20260228/change_points.csv",
+  "audience_tier": "analytical",
+  "portal_page": 3,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover",
+    "date_range_slider"
+  ],
+  "data_source_path": "results/core_models_20260228/change_points.csv",
+  "static_fallback_identical": true
+}

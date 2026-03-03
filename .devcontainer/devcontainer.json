@@ -1,0 +1,42 @@
+{
+	"name": "AIG-RLIC+ Quant Workstation",
+	"image": "mcr.microsoft.com/devcontainers/python:3-3.14-trixie",
+	"features": {
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/node:1": { "version": "lts" },
+		"ghcr.io/stu-bell/devcontainer-features/claude-code:0": {}
+	},
+
+	// Ensure host ~/.claude/ and ~/.claude.json exist before bind-mounting.
+	// Uses python for cross-platform compatibility (macOS, Linux, Windows/WSL2).
+	"initializeCommand": "python3 -c \"import pathlib, os; h=pathlib.Path.home(); (h/'.claude').mkdir(exist_ok=True); (h/'.claude.json').touch(exist_ok=True)\" || python -c \"import pathlib; h=pathlib.Path.home(); (h/'.claude').mkdir(exist_ok=True); (h/'.claude.json').touch(exist_ok=True)\"",
+
+	// Bind-mount host Claude config directly into the container.
+	// Changes inside the container persist to the host and vice versa.
+	//   ~/.claude/          → settings.json, memory, credentials, history, plans
+	//   ~/.claude.json      → MCP server configs, project settings
+	"mounts": [
+		"source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached"
+	],
+
+	// Install Python packages + configure MCP servers & agent teams.
+	// API keys are read from Codespaces secrets / environment variables:
+	//   ALPHAVANTAGE_API_KEY, FRED_API_KEY
+	"postCreateCommand": "bash setup.sh",
+
+	// Codespaces secrets → container environment
+	"remoteEnv": {
+		"ALPHAVANTAGE_API_KEY": "${localEnv:ALPHAVANTAGE_API_KEY}",
+		"FRED_API_KEY": "${localEnv:FRED_API_KEY}"
+	},
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-toolsai.jupyter"
+			]
+		}
+	}
+}

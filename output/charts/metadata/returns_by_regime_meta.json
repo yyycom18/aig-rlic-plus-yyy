@@ -1,0 +1,16 @@
+{
+  "chart_id": "returns_by_regime",
+  "title": "Equity Returns Collapse When Credit Stress is Elevated",
+  "caption": "SPY annualizes +16.9% in Q1 (calm) but -1.0% in Q4 (stress), with volatility tripling.",
+  "description": "Bar chart of annualized SPY returns by HY-IG spread quartile.",
+  "source": "results/exploratory_20260228/regime_descriptive_stats.csv",
+  "audience_tier": "narrative",
+  "portal_page": 2,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/exploratory_20260228/regime_descriptive_stats.csv",
+  "static_fallback_identical": true
+}

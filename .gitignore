@@ -1,0 +1,33 @@
+# Environment & secrets
+.env
+.env.*
+*.key
+credentials*/
+secrets*/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+*.swp
+*.swo
+
+# Claude Code — keep shared settings & agents, ignore local/personal
+.claude/settings.local.json
+
+# Data (large files — add specific datasets as needed)
+*.parquet
+*.h5
+*.hdf5

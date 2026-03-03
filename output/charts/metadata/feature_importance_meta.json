@@ -1,0 +1,16 @@
+{
+  "chart_id": "feature_importance",
+  "title": "Yield Curve and Financial Conditions Dominate, Credit Spread is Supporting",
+  "caption": "Yield curve slope (12.4%) and NFCI (11.3%) rank above HY-IG spread (7.9%).",
+  "description": "Top 10 features by Random Forest importance for predicting SPY direction.",
+  "source": "results/core_models_20260228/rf_feature_importance.csv",
+  "audience_tier": "analytical",
+  "portal_page": 3,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/core_models_20260228/rf_feature_importance.csv",
+  "static_fallback_identical": true
+}

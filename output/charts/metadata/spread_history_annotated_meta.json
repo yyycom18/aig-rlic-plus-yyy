@@ -1,0 +1,17 @@
+{
+  "chart_id": "spread_history_annotated",
+  "title": "25 Years of Credit Stress: From Dot-Com to Rate Shock",
+  "caption": "HY-IG spread peaked at ~2,000 bps during the GFC and ~1,100 bps during COVID.",
+  "description": "HY-IG spread time series with major event annotations and NBER recession shading.",
+  "source": "data/hy_ig_spy_daily_20000101_20251231.parquet",
+  "audience_tier": "narrative",
+  "portal_page": 2,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover",
+    "date_range_slider"
+  ],
+  "data_source_path": "data/hy_ig_spy_daily_20000101_20251231.parquet",
+  "static_fallback_identical": true
+}

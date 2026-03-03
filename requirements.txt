@@ -1,0 +1,36 @@
+# Core computation
+numpy
+pandas
+scipy
+
+# Econometrics & statistics
+statsmodels
+scikit-learn
+arch
+linearmodels
+
+# Visualization
+matplotlib
+seaborn
+plotly
+
+# Financial data
+yfinance
+fredapi
+
+# Jupyter
+jupyterlab
+ipykernel
+
+# File I/O
+openpyxl
+xlsxwriter
+
+# Web / scraping
+requests
+beautifulsoup4
+lxml
+
+# Display
+tabulate
+rich

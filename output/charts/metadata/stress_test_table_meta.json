@@ -1,0 +1,16 @@
+{
+  "chart_id": "stress_test_table",
+  "title": "Strategy Excels in GFC, Struggles in 2022 Rate Shock",
+  "caption": "HMM strategies dramatically outperform during GFC but underperform in the 2022 rate-driven selloff.",
+  "description": "Sharpe ratios for top-5 strategies across stress periods. Green = outperform B&H.",
+  "source": "results/tournament_validation_20260228/stress_tests.csv",
+  "audience_tier": "analytical",
+  "portal_page": 4,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/tournament_validation_20260228/stress_tests.csv",
+  "static_fallback_identical": true
+}

@@ -1,0 +1,16 @@
+{
+  "chart_id": "quantile_regression",
+  "title": "Credit Stress Widens Both Tails of the Equity Return Distribution",
+  "caption": "Negative at tau=0.05 (-0.014), near zero at median, positive at tau=0.90 (+0.010): spreads widen the entire distribution.",
+  "description": "Quantile regression coefficients of HY-IG z-score on 21d forward SPY returns across quantiles.",
+  "source": "results/core_models_20260228/quantile_regression.csv",
+  "audience_tier": "analytical",
+  "portal_page": 3,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover"
+  ],
+  "data_source_path": "results/core_models_20260228/quantile_regression.csv",
+  "static_fallback_identical": true
+}

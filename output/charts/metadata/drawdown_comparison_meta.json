@@ -1,0 +1,17 @@
+{
+  "chart_id": "drawdown_comparison",
+  "title": "Maximum Drawdown: 11.6% (HMM Strategy) vs 33.7% (Buy-and-Hold)",
+  "caption": "HMM strategy's worst drawdown (-11.6%) is one-third of buy-and-hold's (-33.7%).",
+  "description": "Underwater plot comparing W1 HMM Long/Cash drawdowns vs buy-and-hold SPY (OOS 2018-2025).",
+  "source": "data/hy_ig_spy_daily_20000101_20251231.parquet",
+  "audience_tier": "analytical",
+  "portal_page": 4,
+  "interactive_controls": [
+    "zoom",
+    "pan",
+    "hover",
+    "date_range_slider"
+  ],
+  "data_source_path": "data/hy_ig_spy_daily_20000101_20251231.parquet",
+  "static_fallback_identical": true
+}
