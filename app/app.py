@@ -9,9 +9,10 @@ import streamlit as st
 sys.path.insert(0, os.path.dirname(__file__))
 
 from components.charts import load_plotly_chart
+from components.identity_panel import render_identity_panel
 from components.metrics import kpi_row
-from components.sidebar import render_sidebar
 from components.narrative import render_glossary_sidebar
+from components.sidebar import render_sidebar
 
 st.set_page_config(
     page_title="AIG-RLIC+ Research Portal",
@@ -43,7 +44,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown("---")
+# --- Indicator Identity Panel (Step C) ---
+render_identity_panel(study="hy_ig", monthly_data=None, analysis_data=None, strategy_data=None)
 
 # --- KPI Cards ---
 kpi_row(
