@@ -291,8 +291,8 @@ def _radar_fig(
             angularaxis=dict(tickfont=dict(size=11)),
         ),
         showlegend=False,
-        height=380,
-        margin=dict(l=80, r=80, t=40, b=40),
+        height=420,
+        margin=dict(l=60, r=60, t=24, b=24),
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
     )
@@ -340,20 +340,30 @@ def render_identity_panel(
     st.markdown(f"**Primary use case:** {primary}")
     st.markdown(f"**Secondary use case:** {secondary}")
     st.markdown(f"*{summary}*")
-    st.markdown("---")
 
-    # ----- 3. Radar chart with tooltips (Section 3) -----
+    # ----- 3. Two-column: Radar (left) + Understanding These Dimensions (right) -----
     scores, score_metadata = _compute_behavioral_scores_with_metadata(
         study, monthly_data, analysis_data, strategy_data
     )
     tooltip_texts = [m["tooltip"] for m in score_metadata]
     fig = _radar_fig(scores, BEHAVIORAL_DIMENSIONS, tooltip_texts=tooltip_texts)
-    st.plotly_chart(fig, use_container_width=True)
 
-    # ----- 4. What These Scores Mean (Section 2 — always visible) -----
-    st.subheader("What These Scores Mean")
-    for axis_name, explanation in AXIS_EXPLANATIONS:
-        st.markdown(f"- **{axis_name}** → {explanation}")
+    col_radar, col_explain = st.columns([3, 2])
+    with col_radar:
+        st.plotly_chart(fig, use_container_width=True)
+    with col_explain:
+        st.subheader("Understanding These Dimensions")
+        bullets_html = "".join(
+            f'<li><strong>{axis_name}</strong> &rarr; {explanation}</li>'
+            for axis_name, explanation in AXIS_EXPLANATIONS
+        )
+        st.markdown(
+            '<div style="background:#f8f9fa; border:1px solid #e9ecef; border-radius:8px; '
+            'padding:1rem 1.25rem; margin-top:0.5rem;">'
+            f'<ul style="margin:0; padding-left:1.2rem; line-height:1.6;">{bullets_html}</ul>'
+            '</div>',
+            unsafe_allow_html=True,
+        )
     st.markdown("---")
 
     # ----- 5. Expandable "How These Scores Are Calculated" (Section 4) -----
