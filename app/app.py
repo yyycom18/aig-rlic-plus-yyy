@@ -13,6 +13,7 @@ from components.identity_panel import render_identity_panel
 from components.metrics import kpi_row
 from components.narrative import render_glossary_sidebar
 from components.sidebar import render_sidebar
+from core import IndicatorDNALoader
 
 st.set_page_config(
     page_title="AIG-RLIC+ Research Portal",
@@ -20,6 +21,11 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# --- Indicator DNA loader (Step C – Task 1) ---
+_CONFIG_DIR = os.path.join(os.path.dirname(__file__), "..", "config")
+_DNA_JSON_PATH = os.path.join(_CONFIG_DIR, "indicator_dna.json")
+_dna_loader = IndicatorDNALoader(json_path=_DNA_JSON_PATH)
 
 # Load custom CSS
 css_path = os.path.join(os.path.dirname(__file__), "assets", "style.css")
@@ -30,6 +36,33 @@ if os.path.exists(css_path):
 # --- Sidebar ---
 render_sidebar()
 render_glossary_sidebar()
+
+# Sidebar: indicator selector powered by IndicatorDNALoader
+with st.sidebar:
+    try:
+        _dna_map = _dna_loader.load()
+        _indicator_ids = sorted(_dna_map.keys())
+    except Exception:
+        _dna_map = {}
+        _indicator_ids = []
+
+    if _indicator_ids:
+        default_id = "hy_ig_spread" if "hy_ig_spread" in _indicator_ids else _indicator_ids[0]
+
+        def _format_indicator(ind_id: str) -> str:
+            dna = _dna_map.get(ind_id)
+            return dna.name if dna else ind_id
+
+        selected_indicator_id = st.selectbox(
+            "Select Indicator",
+            _indicator_ids,
+            index=_indicator_ids.index(default_id) if default_id in _indicator_ids else 0,
+            format_func=_format_indicator,
+        )
+        selected_dna = _dna_map.get(selected_indicator_id)
+    else:
+        selected_indicator_id = None
+        selected_dna = None
 
 # --- Header ---
 st.title("AIG-RLIC+ Research Portal")
@@ -45,7 +78,14 @@ st.markdown(
 )
 
 # --- Indicator Identity Panel (Step C) ---
-render_identity_panel(study="hy_ig", monthly_data=None, analysis_data=None, strategy_data=None)
+# For now, behavioral metrics are wired to HY-IG study; DNA panel uses selected_dna.
+render_identity_panel(
+    study="hy_ig",
+    monthly_data=None,
+    analysis_data=None,
+    strategy_data=None,
+    indicator_dna=selected_dna,
+)
 
 # --- KPI Cards ---
 kpi_row(

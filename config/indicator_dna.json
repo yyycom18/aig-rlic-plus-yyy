@@ -1,0 +1,32 @@
+{
+  "indicators": [
+    {
+      "id": "hy_ig_spread",
+      "name": "HY-IG Spread",
+      "identity_type": "Risk Overlay",
+      "primary_use_case": "Crisis risk reduction",
+      "secondary_use_case": "Regime filter for equity allocation",
+      "one_line_summary": "This indicator behaves like a defensive sentinel, strongest during stress environments.",
+      "as_of": "2026-02-28"
+    },
+    {
+      "id": "vix",
+      "name": "VIX Index",
+      "identity_type": "Volatility Stress Indicator",
+      "primary_use_case": "Market stress detection",
+      "secondary_use_case": "Regime timing",
+      "one_line_summary": "Fear gauge for equity volatility.",
+      "as_of": "2026-02-28"
+    },
+    {
+      "id": "yield_curve",
+      "name": "Yield Curve (10Y-3M)",
+      "identity_type": "Macro Growth Indicator",
+      "primary_use_case": "Economic growth signal",
+      "secondary_use_case": "Recession early warning",
+      "one_line_summary": "Inverted curve signals growth slowdown.",
+      "as_of": "2026-02-28"
+    }
+  ]
+}
+

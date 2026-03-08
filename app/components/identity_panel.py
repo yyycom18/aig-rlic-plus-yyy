@@ -10,6 +10,8 @@ from typing import Dict, List, Optional, Tuple, Any
 import plotly.graph_objects as go
 import streamlit as st
 
+from core import IndicatorDNA
+
 # ---------------------------------------------------------------------------
 # Scoring: Standardization rule (Section 5). All axes use this.
 # ---------------------------------------------------------------------------
@@ -31,12 +33,15 @@ def normalize_to_scale(
     return round(t * scale_max, 1)
 
 
-# Identity badge colors (as specified)
+# Identity badge colors (unified across indicators)
 IDENTITY_COLORS = {
-    "Risk Overlay": "#2196F3",   # Blue
-    "Alpha Generator": "#f44336",  # Red
-    "Regime Filter": "#9C27B0",    # Purple
-    "Weak Signal": "#9e9e9e",     # Gray
+    "Risk Overlay": "#1f77b4",                # Blue
+    "Alpha Generator": "#d62728",             # Red
+    "Regime Filter": "#9467bd",               # Purple
+    "Macro Growth Indicator": "#2ca02c",      # Green
+    "Volatility Stress Indicator": "#ff7f0e", # Orange
+    "Credit Risk Indicator": "#8c564b",       # Brown
+    "Weak Signal": "#9e9e9e",                 # Gray (fallback)
 }
 
 # Section 1: Short description below badge (plain-language, by identity type)
@@ -44,6 +49,9 @@ IDENTITY_BADGE_DESCRIPTIONS = {
     "Risk Overlay": "A defensive indicator designed to reduce downside risk rather than increase returns.",
     "Alpha Generator": "A return-enhancing, offensive indicator focused on capturing upside.",
     "Regime Filter": "An allocation timing tool that helps switch between risk-on and risk-off.",
+    "Macro Growth Indicator": "A macroeconomic growth signal that tracks expansions and slowdowns.",
+    "Volatility Stress Indicator": "A market stress gauge that spikes when fear and uncertainty rise.",
+    "Credit Risk Indicator": "A credit health signal capturing default and spread risk in bond markets.",
     "Weak Signal": "Limited statistical strength; use with caution and as context only.",
 }
 
@@ -304,6 +312,7 @@ def render_identity_panel(
     monthly_data: Optional[Dict] = None,
     analysis_data: Optional[Dict] = None,
     strategy_data: Optional[Dict] = None,
+    indicator_dna: Optional[IndicatorDNA] = None,
 ) -> None:
     """
     Render the Indicator Identity Panel.
@@ -311,11 +320,22 @@ def render_identity_panel(
     5) Expandable How These Scores Are Calculated 6) Optional Evidence Coverage 7) View Research Evidence.
     """
     config = INDICATOR_CONFIG.get(study, INDICATOR_CONFIG["hy_ig"])
-    name = config.get("name", "Indicator")
-    identity_type = config.get("identity_type", "Risk Overlay")
-    primary = config.get("primary_use_case", "")
-    secondary = config.get("secondary_use_case", "")
-    summary = config.get("one_line_summary", "")
+
+    # Prefer DNA metadata when available, fall back to legacy INDICATOR_CONFIG
+    if indicator_dna is not None:
+        name = indicator_dna.name or config.get("name", "Indicator")
+        identity_type = indicator_dna.identity_type or config.get("identity_type", "Risk Overlay")
+        primary = indicator_dna.primary_use_case or config.get("primary_use_case", "")
+        secondary = indicator_dna.secondary_use_case or config.get("secondary_use_case", "")
+        summary = indicator_dna.one_line_summary or config.get("one_line_summary", "")
+        as_of_dt = getattr(indicator_dna, "as_of", None)
+    else:
+        name = config.get("name", "Indicator")
+        identity_type = config.get("identity_type", "Risk Overlay")
+        primary = config.get("primary_use_case", "")
+        secondary = config.get("secondary_use_case", "")
+        summary = config.get("one_line_summary", "")
+        as_of_dt = None
 
     badge_color = IDENTITY_COLORS.get(identity_type, IDENTITY_COLORS["Weak Signal"])
     badge_description = IDENTITY_BADGE_DESCRIPTIONS.get(
@@ -327,6 +347,29 @@ def render_identity_panel(
     st.markdown("---")
     st.markdown(f"## {name}")
 
+    # ----- 1a. Indicator DNA block – what kind of signal is this? -----
+    st.markdown("**Indicator DNA — what kind of signal is this?**")
+    col_left, col_right = st.columns([1, 1])
+    with col_left:
+        st.markdown(f"- **Identity type:** {identity_type}")
+        st.markdown(f"- **Primary use case:** {primary or 'Not specified'}")
+    with col_right:
+        if secondary:
+            st.markdown(f"- **Secondary use case:** {secondary}")
+        if summary:
+            st.markdown(f"*{summary}*")
+        if as_of_dt is not None:
+            # Graceful handling of stale dates: show subtle hint if older than ~1 year
+            from datetime import datetime, timezone
+
+            now = datetime.now(tz=as_of_dt.tzinfo or timezone.utc)
+            days_old = (now - as_of_dt).days
+            label = as_of_dt.date().isoformat()
+            if days_old > 365:
+                st.caption(f"As of {label} (older research snapshot)")
+            else:
+                st.caption(f"As of {label}")
+
     # ----- 2. Identity Badge + Short description (Section 1) -----
     col_badge, _ = st.columns([1, 3])
     with col_badge:
@@ -336,10 +379,6 @@ def render_identity_panel(
             unsafe_allow_html=True,
         )
     st.caption(badge_description)
-    st.markdown(f"**Suggested identity:** {identity_type}")
-    st.markdown(f"**Primary use case:** {primary}")
-    st.markdown(f"**Secondary use case:** {secondary}")
-    st.markdown(f"*{summary}*")
 
     # ----- 3. Two-column: Radar (left) + Understanding These Dimensions (right) -----
     scores, score_metadata = _compute_behavioral_scores_with_metadata(
