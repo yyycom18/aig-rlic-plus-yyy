@@ -362,7 +362,14 @@ def render_identity_panel(
             # Graceful handling of stale dates: show subtle hint if older than ~1 year
             from datetime import datetime, timezone
 
-            now = datetime.now(tz=as_of_dt.tzinfo or timezone.utc)
+            # Ensure both are naive or both are aware for subtraction
+            if as_of_dt.tzinfo is not None:
+                # as_of_dt is aware; get aware now
+                now = datetime.now(tz=timezone.utc).astimezone(as_of_dt.tzinfo)
+            else:
+                # as_of_dt is naive; get naive now
+                now = datetime.now()
+            
             days_old = (now - as_of_dt).days
             label = as_of_dt.date().isoformat()
             if days_old > 365:
