@@ -359,23 +359,30 @@ def render_identity_panel(
         if summary:
             st.markdown(f"*{summary}*")
         if as_of_dt is not None:
-            # Graceful handling of stale dates: show subtle hint if older than ~1 year
+            # Display as_of date - graceful handling for any type
             from datetime import datetime, timezone
-
-            # Ensure both are naive or both are aware for subtraction
-            if as_of_dt.tzinfo is not None:
-                # as_of_dt is aware; get aware now
-                now = datetime.now(tz=timezone.utc).astimezone(as_of_dt.tzinfo)
-            else:
-                # as_of_dt is naive; get naive now
-                now = datetime.now()
             
-            days_old = (now - as_of_dt).days
-            label = as_of_dt.date().isoformat()
-            if days_old > 365:
-                st.caption(f"As of {label} (older research snapshot)")
-            else:
-                st.caption(f"As of {label}")
+            try:
+                # Try to compute days old for stale date warning
+                if isinstance(as_of_dt, datetime):
+                    # Ensure both are naive or both are aware for subtraction
+                    if as_of_dt.tzinfo is not None:
+                        now = datetime.now(tz=timezone.utc).astimezone(as_of_dt.tzinfo)
+                    else:
+                        now = datetime.now()
+                    
+                    days_old = (now - as_of_dt).days
+                    label = as_of_dt.date().isoformat()
+                    if days_old > 365:
+                        st.caption(f"As of {label} (older research snapshot)")
+                    else:
+                        st.caption(f"As of {label}")
+                else:
+                    # If as_of_dt is not a datetime, just convert to string
+                    st.caption(f"As of {as_of_dt}")
+            except Exception:
+                # Any error: just display the value as-is
+                st.caption(f"As of {as_of_dt}")
 
     # ----- 2. Identity Badge + Short description (Section 1) -----
     col_badge, _ = st.columns([1, 3])
