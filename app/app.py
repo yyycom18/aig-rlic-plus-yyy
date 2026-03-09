@@ -13,7 +13,7 @@ from components.identity_panel import render_identity_panel
 from components.metrics import kpi_row
 from components.narrative import render_glossary_sidebar
 from components.sidebar import render_sidebar
-from core import IndicatorDNALoader
+from core import IndicatorDNALoader, EnvironmentInteractionLoader
 
 st.set_page_config(
     page_title="AIG-RLIC+ Research Portal",
@@ -26,6 +26,9 @@ st.set_page_config(
 _CONFIG_DIR = os.path.join(os.path.dirname(__file__), "..", "config")
 _DNA_JSON_PATH = os.path.join(_CONFIG_DIR, "indicator_dna.json")
 _dna_loader = IndicatorDNALoader(json_path=_DNA_JSON_PATH)
+_ROOT_DIR = os.path.dirname(os.path.dirname(__file__))
+_ENV_JSON_PATH = os.path.join(_ROOT_DIR, "results", "environment_interaction_scores_hy_ig_spy.json")
+_env_loader = EnvironmentInteractionLoader(json_path=_ENV_JSON_PATH)
 
 # Load custom CSS
 css_path = os.path.join(os.path.dirname(__file__), "assets", "style.css")
@@ -46,6 +49,11 @@ with st.sidebar:
         _dna_map = {}
         _indicator_ids = []
 
+    try:
+        _env_map = _env_loader.get_all()
+    except Exception:
+        _env_map = {}
+
     if _indicator_ids:
         default_id = "hy_ig_spread" if "hy_ig_spread" in _indicator_ids else _indicator_ids[0]
 
@@ -60,9 +68,14 @@ with st.sidebar:
             format_func=_format_indicator,
         )
         selected_dna = _dna_map.get(selected_indicator_id)
+
+        # For now, we always use SPY as the environment
+        env_dict = _env_map.get(selected_indicator_id, {})
+        selected_env = env_dict.get("SPY")
     else:
         selected_indicator_id = None
         selected_dna = None
+        selected_env = None
 
 # --- Header ---
 st.title("AIG-RLIC+ Research Portal")
@@ -85,6 +98,7 @@ render_identity_panel(
     analysis_data=None,
     strategy_data=None,
     indicator_dna=selected_dna,
+    env_interaction=selected_env,
 )
 
 # --- KPI Cards ---

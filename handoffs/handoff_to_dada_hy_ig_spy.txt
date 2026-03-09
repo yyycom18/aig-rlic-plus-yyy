@@ -1,0 +1,33 @@
+To: Dada (Development Agent)
+From: Evan (Economic & Quant Analyst)
+Date: 2026-03-08
+Subject: Handoff — Environment Interaction Scores for HY-IG → SPY (Task 2)
+
+Summary:
+- File saved: results/environment_interaction_scores_hy_ig_spy.json
+- Purpose: Provide normalized Environment Interaction Radar inputs (correlation, lead/lag, stress sensitivity, causality) for the HY-IG credit spread vs SPY.
+
+Requested actions:
+1) Ingest JSON at: results/environment_interaction_scores_hy_ig_spy.json into the metadata/service used by the Streamlit dashboard.
+2) Map fields to radar inputs for the indicator card `hy_ig_spread` when environment = `SPY`.
+3) Render radar with values:
+   - correlation_score: 3 (correlation_value: -0.15)
+   - lead_lag_score: 1 (lead_days: 0)
+   - stress_sensitivity_score: 5
+   - causality_score: 2
+4) Display supporting evidence links (collapsed) from the JSON in the UI and include a tooltip: "Causality significant mainly in stress states; interpret accordingly."
+5) Surface regime‑dependence clearly (e.g., uncertainty bands or a small label "Regime-dependent" on the radar).
+6) Implement on feature branch: feature/environment-radar-hy-ig (do not merge to main).
+
+Deliverables:
+- Metadata ingestion completed and unit-tested.
+- Streamlit UI stub showing the HY-IG → SPY radar and collapsed evidence list.
+- Short README in handoffs/ describing where the JSON came from and who to contact for questions (Evan).
+
+Notes:
+- The scores are evidence‑based summaries; econometric files used are located under results/ as listed inside the JSON. If you need recalibration logic (e.g., percentile mapping), consult Evan before changing the numeric scores.
+- For production, ensure the UI shows uncertainty or regime flag since causality and lead-lag are regime-dependent.
+
+Contact:
+- Evan (Economic and Quant Analyst) — leave questions in handoffs or ping via project chat.
+

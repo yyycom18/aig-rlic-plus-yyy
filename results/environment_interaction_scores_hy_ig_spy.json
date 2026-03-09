@@ -1,0 +1,45 @@
+{
+  "hy_ig_spread": {
+    "SPY": {
+      "correlation_score": 3,
+      "correlation_value": -0.15,
+      "correlation_evidence": [
+        "results/exploratory_20260228/correlations.csv",
+        "results/exploratory_20260228/rolling_252d_correlation.csv",
+        "output/charts/plotly/rolling_correlation.json",
+        "results/exploratory_20260228/ccf.csv"
+      ],
+      "correlation_interpretation": "Moderate negative co-movement at multi-week to multi-month horizons (levels ≈ -0.10 to -0.20); daily correlation weaker but nonlinear dependence exists (distance corr ≈0.39 for changes).",
+
+      "lead_lag_score": 1,
+      "lead_days": 0,
+      "lead_lag_evidence": [
+        "results/exploratory_20260228/ccf.csv",
+        "results/tournament_results_20260228.csv",
+        "results/core_models_20260228/local_projections.csv"
+      ],
+      "lead_lag_interpretation": "Peak correlation is contemporaneous (lag 0). Modest evidence of short (1–3 day) credit leading in some windows, but tournament and LP results show essentially no reliable multi-day lead — practical lead advantage ≈ 0 days.",
+
+      "stress_sensitivity_score": 5,
+      "stress_sensitivity_evidence": [
+        "results/core_models_20260228/gjr_garch.csv",
+        "results/core_models_20260228/markov_regime_probs_3state.parquet",
+        "results/exploratory_20260228/regime_descriptive_stats.csv",
+        "results/tournament_validation_20260228/stress_tests.csv",
+        "results/exploratory_20260228/kde_boundaries.csv",
+        "results/core_models_20260228/transfer_entropy.csv",
+        "results/core_models_20260228/quantile_regression.csv"
+      ],
+      "stress_sensitivity_interpretation": "Very high: spread widening strongly associated with equity drawdowns and volatility spikes in stress states (GJR-GARCH economic magnitude large; regime/Q4 performance drastically worse). HY-IG primarily signals regime/stress state rather than steady alpha.",
+
+      "causality_score": 2,
+      "causality_evidence": [
+        "results/core_models_20260228/granger_causality.csv",
+        "results/core_models_20260228/transfer_entropy.csv",
+        "results/core_models_20260228/cointegration.csv",
+        "results/core_models_20260228/local_projections.csv"
+      ],
+      "causality_interpretation": "Weak-to-moderate and regime-dependent. Toda‑Yamamoto and transfer-entropy show bidirectional flow but credit→equity causality activates mainly in stress; equity→credit dominates in calm. Local projections show weak incremental forward predictive power once controls added."
+    }
+  }
+}

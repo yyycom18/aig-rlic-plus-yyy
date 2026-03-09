@@ -10,7 +10,8 @@ from typing import Dict, List, Optional, Tuple, Any
 import plotly.graph_objects as go
 import streamlit as st
 
-from core import IndicatorDNA
+from core import IndicatorDNA, EnvironmentInteraction
+from .environment_radar import render_environment_radar
 
 # ---------------------------------------------------------------------------
 # Scoring: Standardization rule (Section 5). All axes use this.
@@ -313,6 +314,7 @@ def render_identity_panel(
     analysis_data: Optional[Dict] = None,
     strategy_data: Optional[Dict] = None,
     indicator_dna: Optional[IndicatorDNA] = None,
+    env_interaction: Optional[EnvironmentInteraction] = None,
 ) -> None:
     """
     Render the Indicator Identity Panel.
@@ -348,8 +350,8 @@ def render_identity_panel(
     st.markdown(f"## {name}")
 
     # ----- 1a. Indicator DNA block – what kind of signal is this? -----
-    st.markdown("**Indicator DNA — what kind of signal is this?**")
-    col_left, col_right = st.columns([1, 1])
+    st.subheader("Indicator DNA — what kind of signal is this?")
+    col_left, col_right = st.columns([2, 1])
     with col_left:
         st.markdown(f"- **Identity type:** {identity_type}")
         st.markdown(f"- **Primary use case:** {primary or 'Not specified'}")
@@ -384,7 +386,11 @@ def render_identity_panel(
                 # Any error: just display the value as-is
                 st.caption(f"As of {as_of_dt}")
 
-    # ----- 2. Identity Badge + Short description (Section 1) -----
+    # ----- 2. Environment Interaction Radar (Task 2 – Step C) -----
+    st.subheader("Environment Interaction — how this signal behaves vs the benchmark")
+    render_environment_radar(env_interaction)
+
+    # ----- 3. Identity Badge + Short description (Section 1) -----
     col_badge, _ = st.columns([1, 3])
     with col_badge:
         st.markdown(
@@ -394,7 +400,10 @@ def render_identity_panel(
         )
     st.caption(badge_description)
 
-    # ----- 3. Two-column: Radar (left) + Understanding These Dimensions (right) -----
+    # ----- 3. Strategy Survival Radar (behavioral/strategy layer) -----
+    st.subheader("Strategy Survival — how this signal performs in strategies")
+
+    # ----- 4. Two-column: Strategy / Behavioral Radar (left) + Understanding These Dimensions (right) -----
     scores, score_metadata = _compute_behavioral_scores_with_metadata(
         study, monthly_data, analysis_data, strategy_data
     )
