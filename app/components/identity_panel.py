@@ -318,8 +318,10 @@ def render_identity_panel(
 ) -> None:
     """
     Render the Indicator Identity Panel.
-    Layout: 1) Title 2) Badge + Description 3) Radar 4) What These Scores Mean
-    5) Expandable How These Scores Are Calculated 6) Optional Evidence Coverage 7) View Research Evidence.
+    Current layout (Step C, Tasks 1–2):
+    1) Title
+    2) Indicator DNA block
+    3) Environment Interaction Radar
     """
     config = INDICATOR_CONFIG.get(study, INDICATOR_CONFIG["hy_ig"])
 
@@ -390,64 +392,7 @@ def render_identity_panel(
     st.subheader("Environment Interaction — how this signal behaves vs the benchmark")
     render_environment_radar(env_interaction)
 
-    # ----- 3. Identity Badge + Short description (Section 1) -----
-    col_badge, _ = st.columns([1, 3])
-    with col_badge:
-        st.markdown(
-            f'<span style="display:inline-block; padding: 0.4rem 0.8rem; border-radius: 8px; '
-            f'background-color: {badge_color}; color: white; font-weight: 600;">{identity_type}</span>',
-            unsafe_allow_html=True,
-        )
-    st.caption(badge_description)
-
-    # ----- 3. Strategy Survival Radar (behavioral/strategy layer) -----
-    st.subheader("Strategy Survival — how this signal performs in strategies")
-
-    # ----- 4. Two-column: Strategy / Behavioral Radar (left) + Understanding These Dimensions (right) -----
-    scores, score_metadata = _compute_behavioral_scores_with_metadata(
-        study, monthly_data, analysis_data, strategy_data
-    )
-    tooltip_texts = [m["tooltip"] for m in score_metadata]
-    fig = _radar_fig(scores, BEHAVIORAL_DIMENSIONS, tooltip_texts=tooltip_texts)
-
-    col_radar, col_explain = st.columns([3, 2])
-    with col_radar:
-        st.plotly_chart(fig, use_container_width=True)
-    with col_explain:
-        st.subheader("Understanding These Dimensions")
-        bullets_html = "".join(
-            f'<li><strong>{axis_name}</strong> &rarr; {explanation}</li>'
-            for axis_name, explanation in AXIS_EXPLANATIONS
-        )
-        st.markdown(
-            '<div style="background:#f8f9fa; border:1px solid #e9ecef; border-radius:8px; '
-            'padding:1rem 1.25rem; margin-top:0.5rem;">'
-            f'<ul style="margin:0; padding-left:1.2rem; line-height:1.6;">{bullets_html}</ul>'
-            '</div>',
-            unsafe_allow_html=True,
-        )
-    st.markdown("---")
-
-    # ----- 5. Expandable "How These Scores Are Calculated" (Section 4) -----
-    with st.expander("How These Scores Are Calculated", expanded=False):
-        for i, meta in enumerate(score_metadata):
-            st.markdown(f"**{meta['axis']}**")
-            st.markdown("**Raw inputs:**")
-            for raw in meta["raw_inputs"]:
-                st.markdown(f"- {raw}")
-            st.markdown(f"**Scaling:** {meta['scaling']}")
-            st.markdown(f"**Final score:** {scores[i]}")
-            st.markdown("")
-
-    # ----- 6. Optional Evidence Coverage Tag (Section 6 — collapsible) -----
-    with st.expander("Research depth & evidence coverage", expanded=False):
-        rows = _research_evidence_status(study)
-        completed = sum(1 for _, s in rows if s == "Completed")
-        total = len(rows)
-        st.caption(f"Evidence coverage: {completed}/{total} categories tested.")
-        if completed >= total - 1:
-            st.caption("Research depth: Core phase complete.")
-        for method, status in rows:
-            icon = "✓" if status == "Completed" else ("◐" if status == "In Progress" else "—")
-            st.markdown(f"- **{method}:** {icon} {status}")
-    st.markdown("---")
+    # NOTE: Legacy demo section (Strategy Survival radar + Understanding These Dimensions
+    # + evidence expanders) has been removed from the UI for the YYY workspace.
+    # The helper functions (_compute_behavioral_scores_with_metadata, _radar_fig,
+    # _research_evidence_status) remain available for future Step C Task 3 work.
