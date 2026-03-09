@@ -39,7 +39,30 @@
         "results/core_models_20260228/cointegration.csv",
         "results/core_models_20260228/local_projections.csv"
       ],
-      "causality_interpretation": "Weak-to-moderate and regime-dependent. Toda‑Yamamoto and transfer-entropy show bidirectional flow but credit→equity causality activates mainly in stress; equity→credit dominates in calm. Local projections show weak incremental forward predictive power once controls added."
+      "causality_interpretation": "Weak-to-moderate and regime-dependent. Toda‑Yamamoto and transfer-entropy show bidirectional flow but credit→equity causality activates mainly in stress; equity→credit dominates in calm. Local projections show weak incremental forward predictive power once controls added.",
+
+      "score_source_files": [
+        "results/exploratory_20260228/correlations.csv",
+        "results/exploratory_20260228/rolling_252d_correlation.csv",
+        "output/charts/plotly/rolling_correlation.json",
+        "results/exploratory_20260228/ccf.csv",
+        "results/tournament_results_20260228.csv",
+        "results/core_models_20260228/local_projections.csv",
+        "results/core_models_20260228/gjr_garch.csv",
+        "results/core_models_20260228/markov_regime_probs_3state.parquet",
+        "results/exploratory_20260228/regime_descriptive_stats.csv",
+        "results/tournament_validation_20260228/stress_tests.csv",
+        "results/exploratory_20260228/kde_boundaries.csv",
+        "results/core_models_20260228/transfer_entropy.csv",
+        "results/core_models_20260228/quantile_regression.csv",
+        "results/core_models_20260228/granger_causality.csv",
+        "results/core_models_20260228/cointegration.csv"
+      ],
+      "score_date": "2026-03-08",
+      "score_author": "Evan",
+      "score_method": "evidence-summary-percentile-mapping + expert adjustment",
+      "confidence_level": "Medium",
+      "confidence_reason": "Regime-dependent; causality mainly in stress."
     }
   }
 }

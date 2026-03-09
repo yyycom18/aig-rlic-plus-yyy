@@ -103,8 +103,51 @@ def render_environment_radar(env: Optional[EnvironmentInteraction]) -> None:
         # Provide a short numeric summary for users who struggle with polar charts
         st.markdown(
             f"- **Correlation:** {env.correlation_score:.1f}/5  "
+            f"(value {env.correlation_value:+.2f} vs benchmark)  "
             f"- **Lead / Lag:** {env.lead_lag_score:.1f}/5  "
+            f"(lead ≈ {env.lead_days or 0} days)  "
             f"- **Stress sensitivity:** {env.stress_sensitivity_score:.1f}/5  "
             f"- **Causality:** {env.causality_score:.1f}/5"
         )
+
+        # Evidence & mapping details (collapsed)
+        with st.expander("Evidence & mapping (Environment Interaction)", expanded=False):
+            # Provenance header
+            if env.score_date or env.score_author or env.score_method:
+                meta_lines = []
+                if env.score_date:
+                    meta_lines.append(f"**Score date:** {env.score_date}")
+                if env.score_author:
+                    meta_lines.append(f"**Analyst:** {env.score_author}")
+                if env.score_method:
+                    meta_lines.append(f"**Method:** {env.score_method}")
+                st.markdown("  \n".join(meta_lines))
+                st.markdown("---")
+
+            # Axis-wise explanations
+            st.markdown("**Why these scores?**")
+            st.markdown(
+                f"- **Correlation (Co-movement):** {env.correlation_score:.1f}/5 — "
+                f"{env.correlation_interpretation or ''}"
+            )
+            st.markdown(
+                f"- **Lead / Lag timing advantage:** {env.lead_lag_score:.1f}/5 — "
+                f"{env.lead_lag_interpretation or ''}"
+            )
+            st.markdown(
+                f"- **Sensitivity to market stress:** {env.stress_sensitivity_score:.1f}/5 — "
+                f"{env.stress_sensitivity_interpretation or ''}"
+            )
+            st.markdown(
+                f"- **Causality strength:** {env.causality_score:.1f}/5 — "
+                f"{env.causality_interpretation or ''}"
+            )
+
+            # Source files
+            paths = env.score_source_files or []
+            if paths:
+                st.markdown("---")
+                st.markdown("**Source files used for these scores:**")
+                for p in paths:
+                    st.markdown(f"- `{p}`")
 

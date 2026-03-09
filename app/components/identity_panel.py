@@ -390,6 +390,11 @@ def render_identity_panel(
 
     # ----- 2. Environment Interaction Radar (Task 2 – Step C) -----
     st.subheader("Environment Interaction — how this signal behaves vs the benchmark")
+    if env_interaction and env_interaction.confidence_level:
+        st.markdown(
+            f"**Environment confidence:** {env_interaction.confidence_level}"
+            + (f" — {env_interaction.confidence_reason}" if env_interaction.confidence_reason else "")
+        )
     render_environment_radar(env_interaction)
 
     # NOTE: Legacy demo section (Strategy Survival radar + Understanding These Dimensions

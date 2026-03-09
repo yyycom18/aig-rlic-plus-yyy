@@ -43,6 +43,14 @@ class EnvironmentInteraction:
     causality_evidence: Optional[List[str]] = None
     causality_interpretation: Optional[str] = None
 
+    # Provenance / trust metadata
+    score_source_files: Optional[List[str]] = None
+    score_date: Optional[str] = None
+    score_author: Optional[str] = None
+    score_method: Optional[str] = None
+    confidence_level: Optional[str] = None
+    confidence_reason: Optional[str] = None
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to a plain dict (useful for debugging or JSON export)."""
         return asdict(self)
@@ -114,6 +122,12 @@ class EnvironmentInteractionLoader:
                     stress_sensitivity_interpretation=payload.get("stress_sensitivity_interpretation"),
                     causality_evidence=payload.get("causality_evidence"),
                     causality_interpretation=payload.get("causality_interpretation"),
+                    score_source_files=payload.get("score_source_files"),
+                    score_date=payload.get("score_date"),
+                    score_author=payload.get("score_author"),
+                    score_method=payload.get("score_method"),
+                    confidence_level=payload.get("confidence_level"),
+                    confidence_reason=payload.get("confidence_reason"),
                 )
             if env_dict:
                 result[ind_id] = env_dict
