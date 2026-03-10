@@ -1,0 +1,802 @@
+[
+  {
+    "indicator_name": "Advance Retail Sales: Retail Trade",
+    "identity_type": "Growth",
+    "primary_use_case": "Consumption gauge",
+    "secondary_use_case": "Inflation/Prices",
+    "description": "Measures retail sales levels and momentum as a direct read on consumer demand.",
+    "why_classified": "Retail sales are a core component of consumption and GDP; changes signal demand strength and can feed into goods inflation.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "University of Michigan: Consumer Sentiment",
+    "identity_type": "Growth",
+    "primary_use_case": "Demand forward signal",
+    "secondary_use_case": "Risk & Volatility",
+    "description": "Survey of consumer attitudes that tends to lead spending behaviour.",
+    "why_classified": "Sentiment surveys capture forward consumer intentions and can anticipate changes in consumption; they also reflect sentiment risk which can influence markets.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "PHLX Semiconductor Sector Index",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "Sector cyclical indicator",
+    "secondary_use_case": "Growth",
+    "description": "Equity index tracking semiconductor sector performance and cyclicality.",
+    "why_classified": "Semiconductor equities are cyclically sensitive and correlate with tech capex and demand, making them a sector-level activity proxy.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "ISM Manufacturing PMI",
+    "identity_type": "Growth",
+    "primary_use_case": "Real activity monitor",
+    "secondary_use_case": "Inflation/Prices",
+    "description": "Purchasing managers' survey for manufacturing activity and input prices.",
+    "why_classified": "PMI components reflect production, new orders and input cost pressures—timely indicators of real activity and inflation.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "ISM Services PMI",
+    "identity_type": "Growth",
+    "primary_use_case": "Services activity gauge",
+    "secondary_use_case": "Inflation/Prices",
+    "description": "Survey of services-sector activity, backlog and prices.",
+    "why_classified": "Services PMI captures demand and price pressures in services—important for modern economies where services dominate GDP.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Gold Copper Ratio",
+    "identity_type": "Risk/Commodity",
+    "primary_use_case": "Stagflation/stress signal",
+    "secondary_use_case": "Sector/Commodity",
+    "description": "Ratio of gold to copper prices highlighting safe-haven vs cyclical commodity dynamics.",
+    "why_classified": "Gold often reflects safety demand while copper tracks industrial demand—their ratio signals balance between safe-haven and cyclical forces.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Gold Silver Ratio",
+    "identity_type": "Risk/Commodity",
+    "primary_use_case": "Safe-haven indicator",
+    "secondary_use_case": "Sector/Commodity",
+    "description": "Relative pricing between gold and silver, often used as a liquidity/safety proxy.",
+    "why_classified": "Shifts in precious metals relative valuation can reflect market risk appetite and liquidity preference.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "New House Sale",
+    "identity_type": "Sector/Housing",
+    "primary_use_case": "Housing demand",
+    "secondary_use_case": "Growth",
+    "description": "Monthly measure of new single-family home sales—direct demand indicator for housing.",
+    "why_classified": "New home sales directly reflect buyer demand and are sensitive to rates and consumer confidence.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Building Permits",
+    "identity_type": "Sector/Housing",
+    "primary_use_case": "Future housing supply",
+    "secondary_use_case": "Growth",
+    "description": "Authorisations for new residential construction—forward-looking supply metric.",
+    "why_classified": "Permits lead starts and construction activity, indicating pipeline supply and future employment in construction.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Producer Price Index by industry: Semiconductor and Other Electronic Component Manufacturing",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Sector price pressure",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "PPI for semiconductor component manufacturing capturing input price trends in tech supply chain.",
+    "why_classified": "Sector PPI highlights goods price pressures that can propagate to margins and consumer prices in electronics.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Producer Price Index by Industry: Electronic Computer Manufacturing",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Tech goods inflation monitor",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "PPI for computer manufacturing reflecting goods price movements in IT hardware.",
+    "why_classified": "Tracks price pressure in a key durable goods sector that affects broader manufacturing inflation readings.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Producer Price Index by Commodity: Professional Services (Partial): Information Technology (IT) Technical Support and Consulting Services",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Services price pressure (IT)",
+    "secondary_use_case": "Growth",
+    "description": "PPI component measuring price changes for IT technical support and consulting services.",
+    "why_classified": "Services PPI for IT captures input costs and pricing power in the tech services segment.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "CBOE VIX Index",
+    "identity_type": "Risk & Volatility",
+    "primary_use_case": "Market stress/hedge sizing",
+    "secondary_use_case": "Liquidity & Monetary",
+    "description": "Implied volatility index for the S&P 500—market fear gauge.",
+    "why_classified": "VIX reflects option-implied expected volatility and is a leading indicator of market stress and hedging demand.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Ted Spread",
+    "identity_type": "Credit & Financial Stress",
+    "primary_use_case": "Bank funding stress",
+    "secondary_use_case": "Liquidity & Monetary",
+    "description": "Spread between interbank lending and short-term safe rates indicating interbank risk.",
+    "why_classified": "Widening TED spread signals counterparty risk or liquidity stress in the banking system.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "SOFR US3M Spread",
+    "identity_type": "Liquidity & Monetary",
+    "primary_use_case": "Funding/policy tension",
+    "secondary_use_case": "Credit & Financial Stress",
+    "description": "Spread between SOFR and 3M reference showing short-term funding/policy dynamics.",
+    "why_classified": "This spread captures tightness in funding markets relative to policy rates and can signal liquidity strains.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "US10Y-US2Y Spread",
+    "identity_type": "Liquidity & Monetary",
+    "primary_use_case": "Term-structure / recession signal",
+    "secondary_use_case": "Growth",
+    "description": "Yield curve slope between 10-year and 2-year Treasuries—classic recession/expectations signal.",
+    "why_classified": "Curve inversion and slope changes reflect growth expectations and term premium shifts important for macro outlooks.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Sector ETF Short Interest",
+    "identity_type": "Risk & Volatility",
+    "primary_use_case": "Positioning/short pressure",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "Aggregate short interest within sector ETFs as a proxy for market positioning.",
+    "why_classified": "High short interest indicates concentrated negative positioning, which can precede squeezes or signal stress.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Industrial Production Index",
+    "identity_type": "Growth",
+    "primary_use_case": "Output/activity level",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "Measures industrial output across manufacturing, mining and utilities.",
+    "why_classified": "Direct measure of real economy production and cyclical activity.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "M2 Money Supply",
+    "identity_type": "Liquidity & Monetary",
+    "primary_use_case": "Broad liquidity indicator",
+    "secondary_use_case": "Growth",
+    "description": "Monetary aggregate capturing cash, deposits and near-money—signal of liquidity conditions.",
+    "why_classified": "Changes in M2 influence aggregate demand and can preface inflationary or deflationary trends.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Expected Change in Business Conditions in a Year (Table 26)",
+    "identity_type": "Growth",
+    "primary_use_case": "Forward business expectations",
+    "secondary_use_case": "Sentiment",
+    "description": "Survey-based expected change in business conditions over the coming year.",
+    "why_classified": "Forward-looking expectations often translate into investment and hiring decisions, signaling future activity.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Unemployment Rate",
+    "identity_type": "Growth",
+    "primary_use_case": "Labor slack/tightness",
+    "secondary_use_case": "Inflation/Prices",
+    "description": "Percent of the labor force unemployed—core labor market indicator.",
+    "why_classified": "Labor market slack influences wage pressure and demand, central to growth and inflation dynamics.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Producer Price Index > Final demand less foods and energy - WPUFD49104",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Core producer inflation",
+    "secondary_use_case": "Growth",
+    "description": "Core PPI excluding volatile food and energy components—measures underlying PPI inflation.",
+    "why_classified": "Provides a cleaner signal of producer price trends that feed into consumer inflation.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Employment Cost Index (ECI)",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Wage inflation monitor",
+    "secondary_use_case": "Growth",
+    "description": "Measures changes in labor compensation, a key input to unit labor costs.",
+    "why_classified": "Wage growth is a primary driver of services inflation and a forward input to price pressures.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Import Price Index",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Imported goods price pressure",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "Prices paid for imports—can transmit to domestic inflation via pass-through.",
+    "why_classified": "Import price shifts reflect global commodity and goods price changes that affect domestic PCE/PPI.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Retailers: Inventories to Sales Ratio",
+    "identity_type": "Growth",
+    "primary_use_case": "Demand vs supply balance",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "Ratio of inventories to sales at retailers—signal of demand weakness or excess supply.",
+    "why_classified": "Rising inventories relative to sales can precede demand slowdowns and markdown pressure.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Manufacturers' New Orders: Nondefense Capital Goods Excluding Aircraft (NEWORDER)",
+    "identity_type": "Growth",
+    "primary_use_case": "Capex demand gauge",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "New orders for business investment goods excluding aircraft—proxy for corporate capex demand.",
+    "why_classified": "Reflects investment appetite and can foreshadow manufacturing output and equipment orders.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Loans and Leases in Bank Credit, All Commercial Banks",
+    "identity_type": "Credit & Financial Stress",
+    "primary_use_case": "Credit growth/readiness",
+    "secondary_use_case": "Liquidity & Monetary",
+    "description": "Aggregate bank lending outstanding—indicator of credit supply and financial cycle.",
+    "why_classified": "Credit expansion or contraction signals risk appetite and funding availability for firms and households.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Producer Price Index by Industry: Oil and Gas Field Machinery and Equipment Manufacturing",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Energy capex price pressure",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "PPI for oilfield machinery—reflects cost pressures in energy-related capital goods.",
+    "why_classified": "Important for assessing input cost trends in energy sector capex and drilling activity.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Credit Card Default Rate",
+    "identity_type": "Credit & Financial Stress",
+    "primary_use_case": "Consumer credit stress",
+    "secondary_use_case": "Growth",
+    "description": "Rate of credit card defaults—direct signal of household financial stress.",
+    "why_classified": "Rising defaults indicate consumer balance-sheet deterioration and can presage consumption weakness.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Annual Rate for Housing Units Authorized in Permit-Issuing Places",
+    "identity_type": "Sector/Housing",
+    "primary_use_case": "Housing supply pipeline",
+    "secondary_use_case": "Growth",
+    "description": "Annualized rate of housing permits—forward indicator of construction supply.",
+    "why_classified": "Permits reflect builders' plans and signal future construction employment and materials demand.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Annual Rate for Housing Units Started",
+    "identity_type": "Sector/Housing",
+    "primary_use_case": "Construction activity",
+    "secondary_use_case": "Growth",
+    "description": "Annualized housing starts rate—real-time measure of construction commencement.",
+    "why_classified": "Starts indicate immediate construction activity and employment needs in the housing sector.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Annual Rate for New Single-Family Houses Sold",
+    "identity_type": "Sector/Housing",
+    "primary_use_case": "Housing demand",
+    "secondary_use_case": "Growth",
+    "description": "Annualized sales rate for new single-family homes—demand-side housing metric.",
+    "why_classified": "Direct measure of buyer activity in new housing, sensitive to rates and sentiment.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Dodge Momentum Index (DMI)",
+    "identity_type": "Growth",
+    "primary_use_case": "Nonresidential construction momentum",
+    "secondary_use_case": "Sector/Construction",
+    "description": "Index tracking momentum in nonresidential construction projects.",
+    "why_classified": "Construction project momentum anticipates future construction spending and employment in nonresidential sectors.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Architecture Billings Index (ABI)",
+    "identity_type": "Growth",
+    "primary_use_case": "Future commercial construction",
+    "secondary_use_case": "Sector/Construction",
+    "description": "Architect billings as a leading indicator for nonresidential construction activity.",
+    "why_classified": "Billing trends precede actual construction starts and reflect business investment demand.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "ICE BofA US High Yield Index Option-Adjusted Spread",
+    "identity_type": "Credit & Financial Stress",
+    "primary_use_case": "High-yield risk premium",
+    "secondary_use_case": "Risk & Volatility",
+    "description": "Option-adjusted spread for high-yield bonds indicating credit risk premia.",
+    "why_classified": "HY spreads widen in stress and reflect lenders' required compensation for credit risk; central credit stress barometer.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Cass Freight Index: Shipments",
+    "identity_type": "Growth",
+    "primary_use_case": "Goods shipment activity",
+    "secondary_use_case": "Trade",
+    "description": "Freight shipments index reflecting goods movement and trade activity.",
+    "why_classified": "Freight volumes closely track goods demand and industrial activity, useful for cyclical assessment.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Transportation and warehousing employment",
+    "identity_type": "Growth",
+    "primary_use_case": "Logistics labor trend",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "Employment in transportation and warehousing sectors—indicator of goods movement labor demand.",
+    "why_classified": "Labor trends in logistics are sensitive to trade volumes and supply-chain activity, reflecting real activity.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Disposable Personal Income",
+    "identity_type": "Growth",
+    "primary_use_case": "Household income capacity",
+    "secondary_use_case": "Consumption",
+    "description": "After-tax personal income available for spending—supports consumption.",
+    "why_classified": "Disposable income is a primary determinant of consumer spending ability and thus aggregate demand.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "U.S. Exports of Services: Telecommunications, Computer, and Information Services",
+    "identity_type": "Sector/Trade",
+    "primary_use_case": "External services demand",
+    "secondary_use_case": "Growth",
+    "description": "Exports of ICT services—signal of foreign demand for tech services.",
+    "why_classified": "Export strength in services reflects external demand and sectoral competitiveness in tech services.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Personal Consumption Expenditures: Services (PCES)",
+    "identity_type": "Growth",
+    "primary_use_case": "Services consumption & price",
+    "secondary_use_case": "Inflation/Prices",
+    "description": "PCE component for services capturing consumption and price contribution from services.",
+    "why_classified": "Services PCE is a major share of consumption and a key driver of service-sector inflation.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Net Percentage of Domestic Banks Tightening Standards for Commercial and Industrial Loans to Large and Middle-Market Firms",
+    "identity_type": "Credit & Financial Stress",
+    "primary_use_case": "Lending standards gauge",
+    "secondary_use_case": "Liquidity & Monetary",
+    "description": "Net percent of banks reporting tighter lending standards for C&I loans—early credit cycle indicator.",
+    "why_classified": "Net tightening signals reduced credit availability which can slow investment and amplify stress in downturns.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "OAS (Option-Adjusted Spread) HY - IG spread",
+    "identity_type": "Credit & Financial Stress",
+    "primary_use_case": "Relative credit premium",
+    "secondary_use_case": "Risk & Volatility",
+    "description": "Difference between HY and IG spreads capturing risk dispersion across credit tiers.",
+    "why_classified": "Widening HY-IG spread indicates greater stress in lower-rated credits relative to investment grade, signaling risk-off dynamics.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Electricity Data - Net Generation",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "Energy activity proxy",
+    "secondary_use_case": "Growth",
+    "description": "Total electricity generated across sectors—proxy for industrial and economic activity.",
+    "why_classified": "Electricity generation is closely tied to industrial output and overall energy demand, a real activity indicator.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Electricity Data - Consumption",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "Energy demand proxy",
+    "secondary_use_case": "Growth",
+    "description": "Total electricity consumption reflecting end‑use demand patterns.",
+    "why_classified": "Consumption captures real economic activity in households and industry; changes signal demand shifts.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "U.S. Natural Gas Imports",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "Energy supply flow",
+    "secondary_use_case": "Energy",
+    "description": "Imports of natural gas into the U.S.—indicator of domestic supply/demand balance and trade flows.",
+    "why_classified": "Import/export flows reflect global demand and domestic production dynamics that affect energy prices.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "U.S. Natural Gas Exports",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "Export demand/surplus",
+    "secondary_use_case": "Energy",
+    "description": "Exports of natural gas—indicator of external demand and domestic surplus dynamics.",
+    "why_classified": "Growing exports can signal global demand strength and domestic production surplus impacting prices.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "PCE - Nondurable goods",
+    "identity_type": "Growth",
+    "primary_use_case": "Goods consumption & price",
+    "secondary_use_case": "Inflation/Prices",
+    "description": "PCE component for nondurable goods measuring consumption and price trends for consumables.",
+    "why_classified": "Tracks short‑lived goods demand and goods price pressures which affect headline PCE dynamics.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "PCE - Housing",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Housing consumption component",
+    "secondary_use_case": "Sector/Housing",
+    "description": "PCE contribution from housing‑related consumption and services prices.",
+    "why_classified": "Housing-related consumption and rental equivalent prices are major contributors to services inflation.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "PCE - Health care",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Health consumption & price",
+    "secondary_use_case": "Sector/Structural",
+    "description": "PCE component for health-care services and goods—tracks demand and price changes in health.",
+    "why_classified": "Health is a large, structural services category with distinct inflation dynamics and low frequency movements.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "PCE - Financial services and insurance",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Financial services price component",
+    "secondary_use_case": "Sector/Structural",
+    "description": "PCE component tracking prices for financial services and insurance.",
+    "why_classified": "Sectoral services price signal; lower frequency and limited direct impact on core inflation decisions.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "PCE - Communication",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Communication services price",
+    "secondary_use_case": "Sector/Structural",
+    "description": "PCE component for communication services measuring price and consumption.",
+    "why_classified": "Captures prices in telecom/communication services; sector-specific pricing dynamics.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Health System Tracker - National Health Spending Explorer",
+    "identity_type": "Sector/Structural",
+    "primary_use_case": "Long-run health spending context",
+    "secondary_use_case": "Inflation/Prices",
+    "description": "Dataset outlining national health spending over time—contextual, low-frequency.",
+    "why_classified": "Provides structural, long-run perspective on health expenditures rather than high-frequency forecasting value.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Global Health Expenditure Database",
+    "identity_type": "Sector/Structural",
+    "primary_use_case": "Cross-country health context",
+    "secondary_use_case": "Context",
+    "description": "International dataset for health expenditure comparisons—contextual reference.",
+    "why_classified": "Useful for structural cross-country analysis; low frequency and not a short-term trading signal.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Petroleum & Other Liquids - Inventory",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "Oil supply buffer signal",
+    "secondary_use_case": "Risk/Commodity",
+    "description": "Inventory levels for petroleum and liquids—indicator of near-term supply pressure.",
+    "why_classified": "Inventory draws or builds directly influence crude price dynamics and near-term supply tightness.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Crude Oil Prices: West Texas Intermediate (WTI)",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "Energy price signal",
+    "secondary_use_case": "Inflation/Prices",
+    "description": "Benchmark crude oil price—direct input to energy inflation and economic shocks.",
+    "why_classified": "WTI price moves have immediate macroeconomic and inflationary implications for energy-intensive sectors.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Refinery Utilization & Capacity - Operable Utilization Rate",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "Refining capacity tightness",
+    "secondary_use_case": "Supply",
+    "description": "Refinery utilization rate measuring capacity use and potential supply bottlenecks.",
+    "why_classified": "High utilization signals tight refining capacity which can amplify crude price moves and product shortages.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Total Primary Energy Consumption (Table 1.1)",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "Broad energy demand",
+    "secondary_use_case": "Growth",
+    "description": "Aggregate primary energy consumption across fuels—low-frequency activity proxy.",
+    "why_classified": "Broad energy demand trends map to long-run economic activity; low-frequency and structural.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Electricity Net Generation, Total (Table 7.2a)",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "Total generation (low-frequency)",
+    "secondary_use_case": "Growth",
+    "description": "Total electricity generation across sectors—contextual activity measure.",
+    "why_classified": "Useful as a long-run activity proxy but low-frequency; less useful for short-term trading signals.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Electricity End Use, Total (Table 7.1)",
+    "identity_type": "Sector/Commodity/Structural",
+    "primary_use_case": "End-use demand patterns",
+    "secondary_use_case": "Growth",
+    "description": "Breakdown of electricity end-use across sectors—structural demand information.",
+    "why_classified": "Provides sectoral demand structure useful for long-term analysis rather than high-frequency timing.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Pharmaceutical and Other Medical Products Expenditures Price Index",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Pharma product price pressure",
+    "secondary_use_case": "Sector/Structural",
+    "description": "Price index for pharmaceutical and medical product expenditures.",
+    "why_classified": "Tracks sectoral price pressure in pharmaceuticals, relevant for health sector inflation analysis.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Health Expenditures Price Index, MEPS Account Basis",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Health services price trend",
+    "secondary_use_case": "Sector/Structural",
+    "description": "Health expenditure price index on a MEPS basis—sectoral price measure.",
+    "why_classified": "Useful to track health-sector inflation dynamics which can be persistent and structural.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Electricity Price (YoY)",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Energy inflation measure (YoY)",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "Year-over-year change in electricity prices—direct energy inflation signal.",
+    "why_classified": "Provides direct evidence of energy price inflation affecting consumer and producer prices.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Electricity Price (YoY) - CPI (YoY)",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Energy contribution to CPI",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "Comparison of electricity YoY change versus CPI YoY to show relative contribution.",
+    "why_classified": "Helps isolate electricity's share of headline CPI movements and contribution to inflation.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Average Price of Electricity to Ultimate Customers (YoY)",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Consumer electricity inflation",
+    "secondary_use_case": "Sector/Commodity/Structural",
+    "description": "Average end-customer electricity price YoY—consumer-facing energy inflation signal.",
+    "why_classified": "Directly measures the consumer price experience for electricity which feeds into CPI components.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Portland Cement Shipments",
+    "identity_type": "Sector/Construction",
+    "primary_use_case": "Construction materials flow",
+    "secondary_use_case": "Growth",
+    "description": "Cement shipments as a proxy for construction activity and materials demand.",
+    "why_classified": "Construction materials shipments are leading indicators for building and infrastructure activity.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Producer Price Index by Industry: Telecommunications",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Telecom sector price pressures",
+    "secondary_use_case": "Sector/Structural",
+    "description": "PPI for telecommunications industry—sectoral input price measure.",
+    "why_classified": "Sector PPI signals input cost movements and potential pass-through to consumer prices in telecom.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "FDA Novel Drug Approvals (NDAs)",
+    "identity_type": "Sector/Structural",
+    "primary_use_case": "Pharma innovation signal",
+    "secondary_use_case": "Innovation",
+    "description": "Count of novel drug approvals—a long-lead indicator for pharma sector innovation.",
+    "why_classified": "Approval counts reflect innovation pipeline health but are low-frequency and not predictive for short-term markets.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Initial Jobless Claims",
+    "identity_type": "Growth",
+    "primary_use_case": "Near-term labor stress",
+    "secondary_use_case": "Labor/Risk",
+    "description": "Weekly new unemployment claims—timely indicator of labor market deterioration.",
+    "why_classified": "Spikes in initial claims are a rapid signal of labor market stress and can precede consumption weakness.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Continued Jobless Claims",
+    "identity_type": "Growth",
+    "primary_use_case": "Persistent unemployment measure",
+    "secondary_use_case": "Labor/Risk",
+    "description": "Ongoing insured unemployment continuing claims—measures persistent labor-market slack.",
+    "why_classified": "Continued claims indicate the depth and persistence of unemployment beyond weekly shocks.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Job Openings: Total Nonfarm (JTSJOL)",
+    "identity_type": "Growth",
+    "primary_use_case": "Labor demand",
+    "secondary_use_case": "Labor",
+    "description": "Total job vacancies signaling hiring demand and labor market tightness (JOLTS).",
+    "why_classified": "High openings indicate demand for labor and wage pressure potential; low openings signal cooling.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "ADP Employment Change",
+    "identity_type": "Growth",
+    "primary_use_case": "Private payroll proxy",
+    "secondary_use_case": "Labor",
+    "description": "ADP private payroll change—timely indicator of employment trends in the private sector.",
+    "why_classified": "Provides higher-frequency private-sector employment reads, useful as a cross-check to official payrolls.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Philadelphia Fed Manufacturing Index",
+    "identity_type": "Growth",
+    "primary_use_case": "Regional manufacturing conditions",
+    "secondary_use_case": "Regional",
+    "description": "Regional diffusion index for manufacturing activity—localised activity signal.",
+    "why_classified": "Regional Fed surveys capture local manufacturing conditions that can presage national trends.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "PCE",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Headline inflation",
+    "secondary_use_case": "Growth",
+    "description": "Personal Consumption Expenditures headline price index—central policy inflation measure.",
+    "why_classified": "PCE is the Fed's preferred inflation gauge and directly influences policy decisions.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Core PCE",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Policy-relevant core inflation",
+    "secondary_use_case": "Growth",
+    "description": "Core PCE excluding food and energy—focus for policy assessment of underlying inflation.",
+    "why_classified": "Removes volatile components to highlight persistent inflation trends that guide policy.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "ISM Services PMI, Price",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Services price/backlog gauge",
+    "secondary_use_case": "Growth",
+    "description": "Price component within the ISM Services PMI capturing services-sector price pressures.",
+    "why_classified": "Direct survey evidence of services price pressures and cost pass-through expectations.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "NAHB/Wells Fargo Housing Market Index",
+    "identity_type": "Sector/Housing",
+    "primary_use_case": "Builder sentiment",
+    "secondary_use_case": "Sentiment",
+    "description": "Builder confidence index for single-family housing demand—leading housing sentiment indicator.",
+    "why_classified": "Builder sentiment anticipates construction activity and housing starts, sensitive to rates and demand.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "US10Y-US3M",
+    "identity_type": "Liquidity & Monetary",
+    "primary_use_case": "Curve/term premium indicator",
+    "secondary_use_case": "Growth",
+    "description": "Spread between 10-year and 3-month Treasuries—alternate term spread and recession signal.",
+    "why_classified": "Variant of the term structure that captures near-term policy expectations and term premium dynamics.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "VIX1M/VIX3M",
+    "identity_type": "Risk & Volatility",
+    "primary_use_case": "Volatility term structure",
+    "secondary_use_case": "Liquidity & Monetary",
+    "description": "Ratio of 1‑month to 3‑month VIX indicating near-term vs term implied volatility dynamics.",
+    "why_classified": "Changes in the vol term structure reflect shifts in near-term risk expectations and term risk.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Health Expenditures Price Index, Blended",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Blended health price measure",
+    "secondary_use_case": "Sector/Structural",
+    "description": "Blended measure of health expenditure prices—low-frequency sectoral inflation metric.",
+    "why_classified": "Aggregates health price measures to provide a composite view; low-frequency relevance.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  },
+  {
+    "indicator_name": "Health Services Expenditures Price Index, MEPS",
+    "identity_type": "Inflation/Prices",
+    "primary_use_case": "Health services price trend",
+    "secondary_use_case": "Sector/Structural",
+    "description": "MEPS-based health services price index—tracks prices in health services.",
+    "why_classified": "Specific measure for health services inflation useful for sectoral analysis.",
+    "last_updated": "2026-03-08",
+    "author": "Evan"
+  }
+]

@@ -143,6 +143,36 @@ def render_environment_radar(env: Optional[EnvironmentInteraction]) -> None:
                 f"{env.causality_interpretation or ''}"
             )
 
+            # High-level mapping explanation (0–5 scale, no formulas)
+            st.markdown("---")
+            st.markdown("**How these scores are mapped (0–5 scale)**")
+            st.markdown(
+                "- **Correlation:** 0 means almost no link to the benchmark, "
+                "3 means a noticeable relationship at multi‑week horizons, "
+                "5 means an unusually strong and persistent co‑movement."
+            )
+            st.markdown(
+                "- **Lead / Lag:** 1 means no reliable lead over the benchmark, "
+                "3 means a short but useful timing edge, "
+                "5 means the signal tends to move well ahead of the benchmark in a repeatable way."
+            )
+            st.markdown(
+                "- **Sensitivity to market stress:** 0 means the signal barely reacts to market crises, "
+                "3 means it clearly strengthens in stress, "
+                "5 means it behaves almost like an on/off switch for stress regimes."
+            )
+            st.markdown(
+                "- **Causality strength:** 0 means no directional evidence from the signal to the benchmark, "
+                "3 means solid stress‑regime evidence but with caveats, "
+                "5 means a very strong, regime‑aware causal channel that is rare in macro data."
+            )
+
+            # Provenance and reproducibility
+            st.caption(
+                "Mapping rules are documented in `results/mapping_rules.json` (v1, 2026‑03‑10) "
+                "and can be reproduced with `scripts/reproduce_score.py`."
+            )
+
             # Source files
             paths = env.score_source_files or []
             if paths:

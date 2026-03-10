@@ -1,0 +1,299 @@
+{
+  "metadata": {
+    "version": 1,
+    "created": "2026-03-10",
+    "author": "Evan (econometrics) + Dada (implementation)",
+    "description": "Mapping rules for Environment Interaction Radar scores (HY-IG spread vs SPY). All scores are on a 0–5 scale.",
+    "notes": [
+      "All thresholds and formulas are confirmed by Evan (Econometrics Agent) on 2026-03-10.",
+      "Caps and normalization constants (e.g. 0.10 for beta_garch, 0.03 for transfer entropy) are calibrated from observed magnitudes in econometrics_summary_20260228.md.",
+      "If future data materially changes these magnitudes, update the caps here and record the rationale in this file."
+    ],
+    "evidence_summary_file": "results/econometrics_summary_20260228.md"
+  },
+  "mapping_rules": {
+    "correlation_score": {
+      "metric": "abs_pearson_r",
+      "description": "Absolute Pearson correlation between HY–IG credit spread signal and SPY forward returns, aggregated at the multi-week to multi-month horizon. The raw correlation_value in environment_interaction_scores_hy_ig_spy.json is the primary input.",
+      "transform": "Take absolute value of the correlation estimate: abs_r = abs(correlation_value). If correlation_value is missing, treat abs_r = 0.",
+      "thresholds": [
+        {
+          "range": [0.0, 0.05],
+          "score": 0,
+          "interpretation": "No economically meaningful linear correlation."
+        },
+        {
+          "range": [0.05, 0.10],
+          "score": 1,
+          "interpretation": "Very weak correlation; effect size too small for practical use."
+        },
+        {
+          "range": [0.10, 0.20],
+          "score": 3,
+          "interpretation": "Moderate correlation; relationship is noticeable at longer horizons."
+        },
+        {
+          "range": [0.20, 0.35],
+          "score": 4,
+          "interpretation": "Strong correlation; credit spread and equity returns co-move meaningfully."
+        },
+        {
+          "range": [0.35, 1.0],
+          "score": 5,
+          "interpretation": "Very strong correlation; unusually tight linear co‑movement."
+        }
+      ],
+      "evidence_files": [
+        "results/exploratory_20260228/correlations.csv",
+        "results/exploratory_20260228/rolling_252d_correlation.csv",
+        "output/charts/plotly/rolling_correlation.json",
+        "results/exploratory_20260228/ccf.csv"
+      ]
+    },
+    "lead_lag_score": {
+      "metric": "lead_days_from_ccf_peak",
+      "description": "Lead/lag timing advantage based on cross‑correlation (CCF) between HY–IG spread changes and SPY returns. The lead_days input is the effective number of calendar days HY–IG tends to move before SPY when the cross‑correlation is strongest.",
+      "transform": "Compute the CCF across integer lags (in trading days). Identify the lag with the maximum absolute CCF where significant_95 is True. If this lag <= 0, set lead_days = 0 (contemporaneous or equity‑led). If this lag > 0, set lead_days = lag. If no significant lags exist or data are missing, set lead_days = 0.",
+      "thresholds": [
+        {
+          "condition": "lead_days <= 0",
+          "score": 1,
+          "interpretation": "No reliable lead advantage; credit and equity move together or equity slightly leads."
+        },
+        {
+          "range": [1, 3],
+          "score": 2,
+          "interpretation": "Very short lead (1–3 days); may help for tactical timing but sensitive to noise."
+        },
+        {
+          "range": [4, 10],
+          "score": 3,
+          "interpretation": "Short‑term lead (4–10 days); potentially meaningful tactical edge."
+        },
+        {
+          "range": [11, 30],
+          "score": 4,
+          "interpretation": "Medium‑term lead (11–30 days); strong evidence of predictive timing."
+        },
+        {
+          "condition": "lead_days > 30",
+          "score": 5,
+          "interpretation": "Very long lead (>30 days); unusually strong timing advantage."
+        }
+      ],
+      "evidence_files": [
+        "results/exploratory_20260228/ccf.csv",
+        "results/core_models_20260228/local_projections.csv",
+        "results/tournament_results_20260228.csv"
+      ]
+    },
+    "stress_sensitivity_score": {
+      "metric": "CompositeScore_stress_sensitivity",
+      "description": "Composite, regime‑aware measure of how strongly HY–IG spread changes are linked to equity stress, volatility spikes, and strategy performance in stress regimes.",
+      "components": {
+        "GARCH_effect": {
+          "formula": "GARCH_effect = min(1, abs(beta_garch) / 0.10)",
+          "inputs": [
+            "beta_garch: economic magnitude of the hy_ig_spread_chg coefficient in the GJR‑GARCH mean or variance equation (daily SPY return response per 1 bps of spread)."
+          ],
+          "cap": 0.10,
+          "interpretation": "How much SPY returns react to unit changes in HY–IG spread; capped to avoid extreme leverage by a few outlier estimates.",
+          "evidence_files": [
+            "results/core_models_20260228/gjr_garch.csv"
+          ]
+        },
+        "Regime_Asymmetry": {
+          "formula": "Regime_Asymmetry = min(1, max_DD_diff_absolute_pct / 60)",
+          "inputs": [
+            "maxDD_stress: maximum drawdown of SPY in stress regime (Q4_stress).",
+            "maxDD_calm: maximum drawdown of SPY in calm regime (Q1_calm).",
+            "max_DD_diff_absolute_pct = 100 * abs(maxDD_stress - maxDD_calm)."
+          ],
+          "cap": 60.0,
+          "interpretation": "How much worse drawdowns are in stress vs calm when HY–IG is elevated; capped at 60 percentage points of drawdown difference.",
+          "evidence_files": [
+            "results/exploratory_20260228/regime_descriptive_stats.csv"
+          ]
+        },
+        "Stress_Strategy_Benefit": {
+          "formula": "Stress_Strategy_Benefit = min(1, max(0, stress_sharpe_diff) / 1.0)",
+          "inputs": [
+            "stress_sharpe_diff = mean over stress windows of (HMM_long_sharpe - BH_sharpe)."
+          ],
+          "cap": 1.0,
+          "interpretation": "How much a HY–IG overlay improves Sharpe during stress episodes relative to buy‑and‑hold; negative differences are floored at 0.",
+          "evidence_files": [
+            "results/tournament_validation_20260228/stress_tests.csv"
+          ]
+        }
+      },
+      "composite_formula": "CompositeScore = 0.50 * GARCH_effect + 0.30 * Regime_Asymmetry + 0.20 * Stress_Strategy_Benefit",
+      "composite_normalization": "Each component is first normalized to [0, 1]. The weighted average CompositeScore is by construction in [0, 1]. If any component is missing or NaN, it is treated as 0 in the composite.",
+      "score_bands": [
+        {
+          "range": [0.0, 0.20],
+          "score": 0,
+          "interpretation": "Essentially no link between HY–IG and equity stress."
+        },
+        {
+          "range": [0.20, 0.40],
+          "score": 1,
+          "interpretation": "Weak stress linkage; effect visible but not dominant."
+        },
+        {
+          "range": [0.40, 0.60],
+          "score": 2,
+          "interpretation": "Moderate stress linkage; credit spreads matter but are not the only driver."
+        },
+        {
+          "range": [0.60, 0.75],
+          "score": 3,
+          "interpretation": "High stress linkage; HY–IG is a strong stress indicator."
+        },
+        {
+          "range": [0.75, 0.90],
+          "score": 4,
+          "interpretation": "Very high stress linkage; equity stress is closely tied to HY–IG behavior."
+        },
+        {
+          "range": [0.90, 1.00],
+          "score": 5,
+          "interpretation": "Extreme stress linkage; HY–IG behaves almost like a direct stress state flag."
+        }
+      ],
+      "evidence_files": [
+        "results/core_models_20260228/gjr_garch.csv",
+        "results/exploratory_20260228/regime_descriptive_stats.csv",
+        "results/tournament_validation_20260228/stress_tests.csv"
+      ]
+    },
+    "causality_score": {
+      "metric": "CompositeCausality",
+      "description": "Regime‑aware composite measure of directional causality from HY–IG spreads to SPY, combining Toda‑Yamamoto tests, transfer entropy, and state‑dependent local projections. Emphasis is on stress‑regime causality rather than full‑sample Granger causality.",
+      "components": {
+        "Toda_Yamamoto_score": {
+          "formula": "Toda_Yamamoto_score = 1.0 if p_credit_to_equity_stress < 0.05; 0.5 if p_credit_to_equity_stress < 0.10; 0.0 otherwise.",
+          "inputs": [
+            "p_credit_to_equity_stress: p‑value for Credit→Equity null in the stress subsample."
+          ],
+          "interpretation": "Binary/ordinal measure of whether HY–IG has statistically significant predictive power for SPY in stress regimes.",
+          "evidence_files": [
+            "results/core_models_20260228/granger_causality.csv"
+          ]
+        },
+        "TransferEntropy_norm": {
+          "formula": "TransferEntropy_norm = min(1, TE_credit_to_equity / 0.03)",
+          "inputs": [
+            "TE_credit_to_equity: estimated transfer entropy from HY–IG to SPY at the chosen lag (typically lag=1)."
+          ],
+          "cap": 0.03,
+          "interpretation": "Information‑theoretic strength of directional dependence; cap reflects the typical observed scale (≈0.02).",
+          "evidence_files": [
+            "results/core_models_20260228/transfer_entropy.csv"
+          ]
+        },
+        "LocalProjections_component": {
+          "formula": "LocalProjections_component = min(1, abs(t_stat_LP) / 3.0)",
+          "inputs": [
+            "t_stat_LP: t‑statistic for the state‑dependent credit‑in‑stress term (e.g. spread_chg_x_stress) in local projections."
+          ],
+          "cap": 3.0,
+          "interpretation": "How strong the estimated forward effect is once controls and regimes are accounted for; values beyond |t|=3 are treated as fully strong (component=1).",
+          "evidence_files": [
+            "results/core_models_20260228/local_projections.csv"
+          ]
+        },
+        "Regime_activation_flag": {
+          "formula": "Regime_activation_flag = 1.0 if causality appears in stress but not in calm (p_stress < 0.05 and p_calm >= 0.05); otherwise 0.0.",
+          "inputs": [
+            "p_credit_to_equity_stress from granger_causality.csv.",
+            "p_credit_to_equity_calm from granger_causality.csv."
+          ],
+          "interpretation": "Flags whether the causal channel is specifically a stress‑regime phenomenon, rather than full‑sample.",
+          "evidence_files": [
+            "results/core_models_20260228/granger_causality.csv"
+          ]
+        }
+      },
+      "composite_formula": "CompositeCausality = 0.45 * Toda_Yamamoto_score + 0.30 * TransferEntropy_norm + 0.15 * LocalProjections_component + 0.10 * Regime_activation_flag",
+      "composite_normalization": "Each component is in [0, 1], so CompositeCausality is in [0, 1]. Missing or NaN components are treated as 0.",
+      "score_bands": [
+        {
+          "range": [0.0, 0.20],
+          "score": 0,
+          "interpretation": "No meaningful evidence of directional causality."
+        },
+        {
+          "range": [0.20, 0.40],
+          "score": 1,
+          "interpretation": "Weak or unstable causal evidence; may not be reliable out of sample."
+        },
+        {
+          "range": [0.40, 0.60],
+          "score": 2,
+          "interpretation": "Moderate causal evidence; effect exists but is not dominant."
+        },
+        {
+          "range": [0.60, 0.80],
+          "score": 3,
+          "interpretation": "Strong causal evidence in stress regimes, with reasonable robustness."
+        },
+        {
+          "range": [0.80, 0.90],
+          "score": 4,
+          "interpretation": "Very strong causal channel; HY–IG reliably leads SPY in stress periods."
+        },
+        {
+          "range": [0.90, 1.00],
+          "score": 5,
+          "interpretation": "Extreme, highly confident causal link; rare in macro‑finance data."
+        }
+      ],
+      "stress_significance_rule": "To assign a causality_score >= 3, require stress‑subsample significance: p_credit_to_equity_stress < 0.05. If this condition is not met, clamp the score to at most 2 regardless of CompositeCausality.",
+      "evidence_files": [
+        "results/core_models_20260228/granger_causality.csv",
+        "results/core_models_20260228/transfer_entropy.csv",
+        "results/core_models_20260228/local_projections.csv",
+        "results/core_models_20260228/cointegration.csv"
+      ]
+    }
+  },
+  "examples": {
+    "hy_ig_spread_to_SPY": {
+      "description": "Illustrative application of the mapping rules to HY–IG spread vs SPY using 2026‑02‑28 evidence files. Values are approximate and for audit intuition; the reproduce_score.py script should be treated as the canonical computation.",
+      "correlation": {
+        "correlation_value": -0.15,
+        "abs_r": 0.15,
+        "mapped_score": 3
+      },
+      "lead_lag": {
+        "best_lag_days": 0,
+        "lead_days": 0,
+        "mapped_score": 1
+      },
+      "stress_sensitivity": {
+        "beta_garch_example": -5.70,
+        "GARCH_effect": 1.0,
+        "maxDD_calm_example": -0.11,
+        "maxDD_stress_example": -0.63,
+        "Regime_Asymmetry": 0.86,
+        "stress_sharpe_diff_example": 0.36,
+        "Stress_Strategy_Benefit": 0.36,
+        "CompositeScore_approx": 0.83,
+        "mapped_score_using_bands": 4
+      },
+      "causality": {
+        "p_credit_to_equity_stress_example": 0.001,
+        "Toda_Yamamoto_score": 1.0,
+        "TE_credit_to_equity_example": 0.012,
+        "TransferEntropy_norm": 0.40,
+        "t_stat_LP_example": 2.6,
+        "LocalProjections_component": 0.87,
+        "Regime_activation_flag": 1.0,
+        "CompositeCausality_approx": 0.80,
+        "mapped_score_using_bands": 4
+      }
+    }
+  }
+}
+
