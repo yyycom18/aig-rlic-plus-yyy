@@ -79,31 +79,17 @@ def _append_edit_log(
 
 def render_dna_card(card: IndicatorDNACard, admin_enabled: bool = True) -> None:
     """Render a single IndicatorDNACard in a clean, compact layout."""
-    st.subheader(card.indicator_name)
+    # Centered, max-width container for improved readability
+    st.markdown(
+        '<div style="max-width:900px;margin-left:auto;margin-right:auto;padding:8px 12px;">',
+        unsafe_allow_html=True,
+    )
 
-    # Chips row
-    chip_col, conf_col = st.columns([4, 1])
-    with chip_col:
-        # Identity (DNA) vs use-case tooltips
-        st.markdown(
-            "_Identity (DNA)_",
-            help=(
-                "What this indicator is — an economic classification used for "
-                "grouping, normalization and analytics."
-            ),
-        )
-        # Primary identity chip uses primary_DNA if available, otherwise identity_type
-        primary_label = card.primary_DNA or card.identity_type
-        primary_color = _PRIMARY_DNA_COLORS.get(primary_label, "#e5e7eb")
-        _chip(primary_label, primary_color)
-
-        st.markdown(
-            "_Use cases_",
-            help="How this indicator is typically used in strategies or decisions.",
-        )
-        _chip(card.primary_use_case, "#ecfdf3")
-        _chip(card.secondary_use_case, "#fefce8")
-    with conf_col:
+    # Header row: title (left) and confidence badge (right), grouped and compact
+    header_col, header_conf = st.columns([8, 1])
+    with header_col:
+        st.subheader(card.indicator_name)
+    with header_conf:
         if card.confidence:
             color = _CONFIDENCE_COLORS.get(card.confidence, "#e5e7eb")
             st.markdown(
@@ -111,40 +97,56 @@ def render_dna_card(card: IndicatorDNACard, admin_enabled: bool = True) -> None:
                 <div style="text-align:right;">
                     <span style="
                         display:inline-block;
-                        padding:2px 8px;
+                        padding:4px 10px;
                         border-radius:999px;
                         background-color:{color};
-                        font-size:0.78rem;
+                        font-size:0.85rem;
                         font-weight:600;
                     ">
-                        Confidence: {card.confidence}
+                        {card.confidence}
                     </span>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
 
-    # One-line description
+    # Grouped chips and use-case layout (two-column for compactness)
+    st.markdown(
+        "<div style='display:flex;flex-wrap:wrap;gap:6px;align-items:center;'>",
+        unsafe_allow_html=True,
+    )
+    # Identity (DNA) chip
+    primary_label = card.primary_DNA or card.identity_type
+    primary_color = _PRIMARY_DNA_COLORS.get(primary_label, "#e5e7eb")
+    _chip(primary_label, primary_color)
+    # Use-case chips are placed next
+    _chip(card.primary_use_case, "#ecfdf3")
+    _chip(card.secondary_use_case, "#fefce8")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # One-line description (keep centered container)
     st.markdown(f"**{card.description}**")
 
-    # Optional DNA classification chips (from mapping)
+    # Optional DNA classification (primary + secondary) displayed succinctly
     if card.primary_DNA or card.secondary_DNA:
-        st.markdown("_DNA classification:_", help="Primary/secondary DNA categories for this indicator.")
-        dna_line = []
-        if card.primary_DNA:
-            dna_line.append(f"**Primary DNA:** {card.primary_DNA}")
-        if card.secondary_DNA:
-            dna_line.append(f"**Secondary DNA:** {', '.join(card.secondary_DNA)}")
-        st.markdown("  \n".join(dna_line))
+        cols = st.columns([1, 1])
+        with cols[0]:
+            if card.primary_DNA:
+                st.markdown(f"**Primary DNA:** {card.primary_DNA}")
+        with cols[1]:
+            if card.secondary_DNA:
+                st.markdown(f"**Secondary DNA:** {', '.join(card.secondary_DNA)}")
 
-    # Expandable rationale
+    # Expandable rationale (condensed)
     with st.expander("Why this classification", expanded=False):
         st.markdown(card.why_classified)
         if card.rationale and card.rationale != card.why_classified:
             st.markdown(f"**DNA rationale:** {card.rationale}")
 
-    # Metadata line (last updated, optional frequency/source)
-    meta_bits = [f"Last updated: {card.last_updated}"]
+    # Metadata line (last updated, optional frequency/source). Date only.
+    # Ensure last_updated shows only date portion if datetime-like string provided
+    last_date = str(card.last_updated).split("T")[0]
+    meta_bits = [f"Last updated: {last_date}"]
     if card.data_frequency:
         meta_bits.append(f"Data frequency: {card.data_frequency}")
     if card.canonical_source_path:
