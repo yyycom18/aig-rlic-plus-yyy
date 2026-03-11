@@ -102,4 +102,6 @@ def test_render_dna_card_smoke_and_author_hidden(monkeypatch):
     # Ensure author value does not appear in any rendered text
     joined = " ".join(dummy.texts)
     assert "Tester" not in joined
+    # Ensure badge text includes "Confidence: High"
+    assert "Confidence: High" in joined
 

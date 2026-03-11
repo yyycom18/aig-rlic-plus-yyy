@@ -92,21 +92,41 @@ def render_dna_card(card: IndicatorDNACard, admin_enabled: bool = True) -> None:
     with header_conf:
         if card.confidence:
             color = _CONFIDENCE_COLORS.get(card.confidence, "#e5e7eb")
+            # Badge HTML with slight top margin so it wraps nicely under title on mobile
             st.markdown(
                 f"""
                 <div style="text-align:right;">
                     <span style="
                         display:inline-block;
                         padding:4px 10px;
+                        margin-top:4px;
                         border-radius:999px;
                         background-color:{color};
                         font-size:0.85rem;
                         font-weight:600;
                     ">
-                        {card.confidence}
+                        Confidence: {card.confidence}
                     </span>
                 </div>
                 """,
+                unsafe_allow_html=True,
+            )
+            # Microcopy and interactive evidence toggle
+            micro = "Confidence reflects evidence consistency; click badge to view sources."
+            st.caption(micro)
+            # Make badge clickable via a dedicated button (keyboard accessible)
+            btn_key = f"confidence_btn_{card.indicator_name}"
+            # Use a keyboard-focusable button; clicking opens the evidence panel
+            if st.button(f"Confidence: {card.confidence}", key=btn_key):
+                st.session_state[f"evidence_open_{card.indicator_name}"] = True
+            # Tooltip (accessible copy shown as title text near badge)
+            tooltip_title = "Confidence"
+            tooltip_body = "Confidence reflects evidence consistency; click badge to view sources."
+            # Expose tooltip text as a visually hidden element for screen readers
+            st.markdown(
+                f'<div aria-hidden="false" style="position:relative;left:0;">'
+                f'<span class="sr-only" aria-label="{tooltip_title}: {tooltip_body}"></span>'
+                f'</div>',
                 unsafe_allow_html=True,
             )
 
@@ -225,4 +245,50 @@ def render_dna_card(card: IndicatorDNACard, admin_enabled: bool = True) -> None:
             }
             st.session_state["dna_card_overrides"] = overrides
             st.success("Edit logged. Changes will be visible for this session and recorded for review.")
+
+    # Evidence panel (click badge to open). Controlled by session_state flag.
+    ev_key = f"evidence_open_{card.indicator_name}"
+    open_flag = bool(st.session_state.get(ev_key, False))
+    with st.expander("Evidence & sources", expanded=open_flag):
+        # Show confidence_reason if available on card
+        cr = getattr(card, "confidence_reason", None)
+        if cr:
+            st.markdown(f"**Confidence reason:** {cr}")
+        # canonical source path
+        if card.canonical_source_path:
+            root_dir = os.path.dirname(os.path.dirname(__file__))
+            abs_path = os.path.join(root_dir, card.canonical_source_path)
+            if os.path.exists(abs_path):
+                st.markdown(f"- Canonical source: [{card.canonical_source_path}]({card.canonical_source_path})")
+            else:
+                st.markdown(f"- Canonical source: `{card.canonical_source_path}` (missing)")
+        # Try to load environment interaction evidence for HY-IG-like indicators
+        env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "results", "environment_interaction_scores_hy_ig_spy.json")
+        evidence_list = []
+        try:
+            if os.path.exists(env_path):
+                import json
+
+                with open(env_path, "r", encoding="utf-8") as f:
+                    env = json.load(f)
+                # Heuristic match: look for keys where indicator name tokens appear
+                name_norm = "".join(filter(str.isalnum, card.indicator_name.lower()))
+                for key, val in env.items():
+                    key_norm = "".join(filter(str.isalnum, key.lower()))
+                    if key_norm in name_norm or name_norm in key_norm:
+                        files = val.get("score_source_files", []) or val.get("correlation_evidence", [])
+                        if isinstance(files, list):
+                            evidence_list.extend(files)
+                        # confidence_reason in env
+                        if val.get("confidence_reason") and not cr:
+                            st.markdown(f"**Confidence reason:** {val.get('confidence_reason')}")
+        except Exception:
+            pass
+        # Fallback: include card.rationale as evidence note
+        if card.rationale:
+            st.markdown(f"- Rationale: {card.rationale}")
+        if evidence_list:
+            st.markdown("**Evidence files:**")
+            for p in sorted(set(evidence_list)):
+                st.markdown(f"- `{p}`")
 
