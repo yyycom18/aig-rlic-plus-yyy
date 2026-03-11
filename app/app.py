@@ -7,6 +7,8 @@ import streamlit as st
 
 # Ensure components are importable
 sys.path.insert(0, os.path.dirname(__file__))
+# Also ensure project root is on sys.path so sibling packages (e.g., scripts/) are importable
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from components.charts import load_plotly_chart
 from components.identity_panel import render_identity_panel
