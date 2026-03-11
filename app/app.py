@@ -19,6 +19,7 @@ from core import (
     IndicatorDNACardLoader,
     EnvironmentInteractionLoader,
 )
+from scripts.validate_dna import validate_indicator_dna
 
 st.set_page_config(
     page_title="AIG-RLIC+ Research Portal",
@@ -98,6 +99,50 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+# --- Indicator DNA cards (library preview for Task 1) ---
+st.markdown("### Indicator DNA cards — library preview")
+try:
+    validation_errors = validate_indicator_dna()
+    if validation_errors:
+        st.warning(
+            "Indicator DNA configuration failed validation; "
+            "cards are hidden until the issues are resolved."
+        )
+        cards_map = {}
+    else:
+        cards_map = _dna_card_loader.get_all()
+except Exception as exc:  # pragma: no cover - defensive
+    st.warning(f"Unable to load Indicator DNA cards: {exc}")
+    cards_map = {}
+
+if cards_map:
+    indicator_names = sorted(cards_map.keys())
+    # Prefer HY-IG spread card if present, otherwise first in list
+    default_name = "OAS (Option-Adjusted Spread) HY - IG spread"
+    default_index = indicator_names.index(default_name) if default_name in indicator_names else 0
+    selected_card_name = st.selectbox(
+        "Browse Indicator DNA cards",
+        indicator_names,
+        index=default_index,
+    )
+
+    # Apply any in-session overrides for admin edits
+    card = cards_map[selected_card_name]
+    overrides = st.session_state.get("dna_card_overrides", {}).get(selected_card_name, {})
+    if overrides:
+        if "confidence" in overrides:
+            card.confidence = overrides["confidence"]
+        if "last_updated" in overrides:
+            card.last_updated = overrides["last_updated"]
+        if "why_classified" in overrides:
+            card.why_classified = overrides["why_classified"]
+
+    # Admin controls are guarded by an env flag; by default, users cannot edit
+    admin_enabled = bool(os.getenv("DNA_ADMIN_ENABLED"))
+    render_dna_card(card, admin_enabled=admin_enabled)
+else:
+    st.caption("No Indicator DNA cards available. Please check data files under `data/`.")
+
 # --- Indicator Identity Panel (Step C) ---
 # For now, behavioral metrics are wired to HY-IG study; DNA panel uses selected_dna.
 render_identity_panel(
@@ -140,42 +185,6 @@ load_plotly_chart(
 )
 
 st.markdown("---")
-
-# --- Indicator DNA cards (library preview for Task 1) ---
-st.markdown("### Indicator DNA cards — library preview")
-try:
-    cards_map = _dna_card_loader.get_all()
-except Exception as exc:  # pragma: no cover - defensive
-    st.warning(f"Unable to load Indicator DNA cards: {exc}")
-    cards_map = {}
-
-if cards_map:
-    indicator_names = sorted(cards_map.keys())
-    # Prefer HY-IG spread card if present, otherwise first in list
-    default_name = "OAS (Option-Adjusted Spread) HY - IG spread"
-    default_index = indicator_names.index(default_name) if default_name in indicator_names else 0
-    selected_card_name = st.selectbox(
-        "Browse Indicator DNA cards",
-        indicator_names,
-        index=default_index,
-    )
-
-    # Apply any in-session overrides for admin edits
-    card = cards_map[selected_card_name]
-    overrides = st.session_state.get("dna_card_overrides", {}).get(selected_card_name, {})
-    if overrides:
-        if "confidence" in overrides:
-            card.confidence = overrides["confidence"]
-        if "last_updated" in overrides:
-            card.last_updated = overrides["last_updated"]
-        if "why_classified" in overrides:
-            card.why_classified = overrides["why_classified"]
-
-    # Admin controls are guarded by an env flag; by default, users cannot edit
-    admin_enabled = bool(os.getenv("DNA_ADMIN_ENABLED"))
-    render_dna_card(card, admin_enabled=admin_enabled)
-else:
-    st.caption("No Indicator DNA cards available. Please check data files under `data/`.")
 
 # --- Finding Index ---
 st.markdown("### Current Findings")

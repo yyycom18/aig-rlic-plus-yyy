@@ -112,13 +112,11 @@ def render_environment_radar(env: Optional[EnvironmentInteraction]) -> None:
 
         # Evidence & mapping details (collapsed)
         with st.expander("Evidence & mapping (Environment Interaction)", expanded=False):
-            # Provenance header
-            if env.score_date or env.score_author or env.score_method:
+            # Provenance header (date + method only; analyst names are not shown in UI)
+            if env.score_date or env.score_method:
                 meta_lines = []
                 if env.score_date:
                     meta_lines.append(f"**Score date:** {env.score_date}")
-                if env.score_author:
-                    meta_lines.append(f"**Analyst:** {env.score_author}")
                 if env.score_method:
                     meta_lines.append(f"**Method:** {env.score_method}")
                 st.markdown("  \n".join(meta_lines))

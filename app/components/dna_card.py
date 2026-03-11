@@ -84,10 +84,23 @@ def render_dna_card(card: IndicatorDNACard, admin_enabled: bool = True) -> None:
     # Chips row
     chip_col, conf_col = st.columns([4, 1])
     with chip_col:
+        # Identity (DNA) vs use-case tooltips
+        st.markdown(
+            "_Identity (DNA)_",
+            help=(
+                "What this indicator is — an economic classification used for "
+                "grouping, normalization and analytics."
+            ),
+        )
         # Primary identity chip uses primary_DNA if available, otherwise identity_type
         primary_label = card.primary_DNA or card.identity_type
         primary_color = _PRIMARY_DNA_COLORS.get(primary_label, "#e5e7eb")
         _chip(primary_label, primary_color)
+
+        st.markdown(
+            "_Use cases_",
+            help="How this indicator is typically used in strategies or decisions.",
+        )
         _chip(card.primary_use_case, "#ecfdf3")
         _chip(card.secondary_use_case, "#fefce8")
     with conf_col:
@@ -130,8 +143,8 @@ def render_dna_card(card: IndicatorDNACard, admin_enabled: bool = True) -> None:
         if card.rationale and card.rationale != card.why_classified:
             st.markdown(f"**DNA rationale:** {card.rationale}")
 
-    # Metadata line (last updated, author, optional frequency/source)
-    meta_bits = [f"Last updated: {card.last_updated}", f"Author: {card.author}"]
+    # Metadata line (last updated, optional frequency/source)
+    meta_bits = [f"Last updated: {card.last_updated}"]
     if card.data_frequency:
         meta_bits.append(f"Data frequency: {card.data_frequency}")
     if card.canonical_source_path:
