@@ -34,3 +34,5 @@ lxml
 # Display
 tabulate
 rich
+fastapi
+uvicorn[standard]

@@ -1,0 +1,87 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+import types
+
+from app.components import dna_card
+from app.core.indicator_dna_cards import IndicatorDNACard
+
+
+def test_append_edit_log_creates_file(tmp_path, monkeypatch):
+    # Redirect project root used inside dna_card module to tmp_path
+    # by patching os.path.dirname(__file__) logic via environment
+    # We simulate by temporarily changing __file__ resolution.
+    original_file = dna_card.__file__
+    try:
+        dna_card.__file__ = str(tmp_path / "app" / "components" / "dna_card.py")
+        (tmp_path / "results").mkdir(parents=True, exist_ok=True)
+
+        # Call the private helper
+        dna_card._append_edit_log(
+            indicator_name="Test Indicator",
+            admin="Tester",
+            field="confidence",
+            before="Medium",
+            after="High",
+        )
+        log_path = tmp_path / "results" / "indicator_dna_metadata_log.csv"
+        assert log_path.exists()
+        content = log_path.read_text(encoding="utf-8").strip().splitlines()
+        # header + one line
+        assert len(content) == 2
+        assert "Test Indicator" in content[1]
+        assert "Tester" in content[1]
+    finally:
+        dna_card.__file__ = original_file
+
+
+def test_render_dna_card_smoke(monkeypatch):
+    """Smoke test: render_dna_card should be callable without raising."""
+
+    # Patch streamlit functions used in dna_card with no-op stubs
+    class DummySt:
+        def subheader(self, *args, **kwargs): ...
+
+        def markdown(self, *args, **kwargs): ...
+
+        def caption(self, *args, **kwargs): ...
+
+        def expander(self, *args, **kwargs):
+            class Ctx:
+                def __enter__(self_inner): return None
+
+                def __exit__(self_inner, exc_type, exc, tb): return False
+
+            return Ctx()
+
+        def text_input(self, *args, **kwargs): return "Tester"
+
+        def selectbox(self, *args, **kwargs): return "High"
+
+        def text_area(self, *args, **kwargs): return "Updated rationale"
+
+        def button(self, *args, **kwargs): return False
+
+        def session_state(self):  # not used directly
+            return {}
+
+    monkeypatch.setattr(dna_card, "st", DummySt())
+
+    card = IndicatorDNACard(
+        indicator_name="Test Indicator",
+        identity_type="Growth",
+        primary_use_case="Test primary",
+        secondary_use_case="Test secondary",
+        description="Description",
+        why_classified="Why",
+        last_updated="2026-03-08",
+        author="Tester",
+        primary_DNA="Growth",
+        secondary_DNA=["Inflation/Prices"],
+        rationale="Rationale",
+        confidence="High",
+    )
+
+    dna_card.render_dna_card(card, admin_enabled=False)
+

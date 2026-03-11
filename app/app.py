@@ -13,7 +13,12 @@ from components.identity_panel import render_identity_panel
 from components.metrics import kpi_row
 from components.narrative import render_glossary_sidebar
 from components.sidebar import render_sidebar
-from core import IndicatorDNALoader, EnvironmentInteractionLoader
+from components.dna_card import render_dna_card
+from core import (
+    IndicatorDNALoader,
+    IndicatorDNACardLoader,
+    EnvironmentInteractionLoader,
+)
 
 st.set_page_config(
     page_title="AIG-RLIC+ Research Portal",
@@ -22,13 +27,16 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# --- Indicator DNA loader (Step C – Task 1) ---
+# --- Indicator DNA loaders (Step C – Task 1) ---
 _CONFIG_DIR = os.path.join(os.path.dirname(__file__), "..", "config")
 _DNA_JSON_PATH = os.path.join(_CONFIG_DIR, "indicator_dna.json")
 _dna_loader = IndicatorDNALoader(json_path=_DNA_JSON_PATH)
 _ROOT_DIR = os.path.dirname(os.path.dirname(__file__))
 _ENV_JSON_PATH = os.path.join(_ROOT_DIR, "results", "environment_interaction_scores_hy_ig_spy.json")
 _env_loader = EnvironmentInteractionLoader(json_path=_ENV_JSON_PATH)
+_DNA_CARDS_PATH = os.path.join(_ROOT_DIR, "data", "indicator_dna_cards.json")
+_DNA_MAPPING_PATH = os.path.join(_ROOT_DIR, "data", "indicator_mapping.json")
+_dna_card_loader = IndicatorDNACardLoader(cards_path=_DNA_CARDS_PATH, mapping_path=_DNA_MAPPING_PATH)
 
 # Load custom CSS
 css_path = os.path.join(os.path.dirname(__file__), "assets", "style.css")
@@ -132,6 +140,42 @@ load_plotly_chart(
 )
 
 st.markdown("---")
+
+# --- Indicator DNA cards (library preview for Task 1) ---
+st.markdown("### Indicator DNA cards — library preview")
+try:
+    cards_map = _dna_card_loader.get_all()
+except Exception as exc:  # pragma: no cover - defensive
+    st.warning(f"Unable to load Indicator DNA cards: {exc}")
+    cards_map = {}
+
+if cards_map:
+    indicator_names = sorted(cards_map.keys())
+    # Prefer HY-IG spread card if present, otherwise first in list
+    default_name = "OAS (Option-Adjusted Spread) HY - IG spread"
+    default_index = indicator_names.index(default_name) if default_name in indicator_names else 0
+    selected_card_name = st.selectbox(
+        "Browse Indicator DNA cards",
+        indicator_names,
+        index=default_index,
+    )
+
+    # Apply any in-session overrides for admin edits
+    card = cards_map[selected_card_name]
+    overrides = st.session_state.get("dna_card_overrides", {}).get(selected_card_name, {})
+    if overrides:
+        if "confidence" in overrides:
+            card.confidence = overrides["confidence"]
+        if "last_updated" in overrides:
+            card.last_updated = overrides["last_updated"]
+        if "why_classified" in overrides:
+            card.why_classified = overrides["why_classified"]
+
+    # Admin controls are guarded by an env flag; by default, users cannot edit
+    admin_enabled = bool(os.getenv("DNA_ADMIN_ENABLED"))
+    render_dna_card(card, admin_enabled=admin_enabled)
+else:
+    st.caption("No Indicator DNA cards available. Please check data files under `data/`.")
 
 # --- Finding Index ---
 st.markdown("### Current Findings")
