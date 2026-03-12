@@ -1,0 +1,6 @@
+Warnings / zero-trades entries:
+P1: trades=0 (strategy marked invalid;n_trades==0)
+P3: trades=0 (strategy marked invalid;n_trades==0)
+
+Mapping used: optimal range 4-20 trades/year -> score 5; <4 scaled up; >20 penalized to 0 at 100.
+If trades are zero, check tournament n_trades column, strategy validity, and date windows.
