@@ -400,8 +400,8 @@ def render_identity_panel(
 
     # ----- 3. Strategy Survival Radar (Task 3) -----
     try:
-        # strategy_data may be None; render panel which handles None gracefully
-        render_strategy_survival_panel(strategy_data)
+        # strategy_data may be None; pass study key so strategy panel can fetch top strategies
+        render_strategy_survival_panel(strategy_data, study=study)
     except Exception as e:
         st.error("Strategy Survival panel failed to render.")
         st.exception(e)
