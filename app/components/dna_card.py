@@ -92,43 +92,16 @@ def render_dna_card(card: IndicatorDNACard, admin_enabled: bool = True) -> None:
     with header_conf:
         if card.confidence:
             color = _CONFIDENCE_COLORS.get(card.confidence, "#e5e7eb")
-            # Badge HTML with slight top margin so it wraps nicely under title on mobile
-            st.markdown(
-                f"""
-                <div style="text-align:right;">
-                    <span style="
-                        display:inline-block;
-                        padding:4px 10px;
-                        margin-top:4px;
-                        border-radius:999px;
-                        background-color:{color};
-                        font-size:0.85rem;
-                        font-weight:600;
-                    ">
-                        Confidence: {card.confidence}
-                    </span>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
-            # Microcopy and interactive evidence toggle
-            micro = "Confidence reflects evidence consistency; click badge to view sources."
-            st.caption(micro)
-            # Make badge clickable via a dedicated button (keyboard accessible)
+            # Use a single keyboard-focusable button as the interactive confidence pill.
             btn_key = f"confidence_btn_{card.indicator_name}"
-            # Use a keyboard-focusable button; clicking opens the evidence panel
-            if st.button(f"Confidence: {card.confidence}", key=btn_key):
+            label = f"Confidence: {card.confidence}"
+            # Render the button; style is standard Streamlit button but microcopy explains meaning.
+            if st.button(label, key=btn_key):
                 st.session_state[f"evidence_open_{card.indicator_name}"] = True
-            # Tooltip (accessible copy shown as title text near badge)
-            tooltip_title = "Confidence"
-            tooltip_body = "Confidence reflects evidence consistency; click badge to view sources."
-            # Expose tooltip text as a visually hidden element for screen readers
-            st.markdown(
-                f'<div aria-hidden="false" style="position:relative;left:0;">'
-                f'<span class="sr-only" aria-label="{tooltip_title}: {tooltip_body}"></span>'
-                f'</div>',
-                unsafe_allow_html=True,
-            )
+            # Microcopy and accessible tooltip text near the button
+            micro = "Confidence reflects evidence consistency; click the badge to view sources. It does not guarantee future performance."
+            st.caption(micro)
+            # For screen readers, the explicit label on the button is sufficient; keep evidence in expander.
 
     # Grouped chips and use-case layout (two-column for compactness)
     st.markdown(
