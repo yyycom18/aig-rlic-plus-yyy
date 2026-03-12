@@ -73,6 +73,9 @@ def test_render_dna_card_smoke_and_author_hidden(monkeypatch):
             return "Updated rationale"
 
         def button(self, *args, **kwargs):
+            # record the button label for assertions
+            if args:
+                self.texts.append(str(args[0]))
             return False
 
         @property

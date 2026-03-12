@@ -12,6 +12,7 @@ import streamlit as st
 
 from core import IndicatorDNA, EnvironmentInteraction
 from .environment_radar import render_environment_radar
+from .strategy_radar import render_strategy_survival_panel
 
 # ---------------------------------------------------------------------------
 # Scoring: Standardization rule (Section 5). All axes use this.
@@ -396,6 +397,14 @@ def render_identity_panel(
             + (f" — {env_interaction.confidence_reason}" if env_interaction.confidence_reason else "")
         )
     render_environment_radar(env_interaction)
+
+    # ----- 3. Strategy Survival Radar (Task 3) -----
+    try:
+        # strategy_data may be None; render panel which handles None gracefully
+        render_strategy_survival_panel(strategy_data)
+    except Exception as e:
+        st.error("Strategy Survival panel failed to render.")
+        st.exception(e)
 
     # NOTE: Legacy demo section (Strategy Survival radar + Understanding These Dimensions
     # + evidence expanders) has been removed from the UI for the YYY workspace.
