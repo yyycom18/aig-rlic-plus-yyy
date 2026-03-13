@@ -115,6 +115,24 @@ def main():
             f.write("No zero-trades warnings; all top-20 have trades > 0.\n")
     print("Wrote diagnostics:", OUTCSV, OUTLOG)
 
+    # Also produce a top20_raw.csv with raw columns for quick inspection
+    top20_csv = OUTDIR / "top20_raw.csv"
+    top20_keys = ["strategy_id", "oos_sharpe", "oos_ann_return", "oos_max_dd", "n_trades", "oos_win_rate", "return_ratio"]
+    with open(top20_csv, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=top20_keys)
+        writer.writeheader()
+        for r in top20:
+            # return_ratio: cannot compute benchmark from this file, set empty
+            writer.writerow({
+                "strategy_id": r.get("strategy_id"),
+                "oos_sharpe": r.get("oos_sharpe"),
+                "oos_ann_return": r.get("oos_ann_return"),
+                "oos_max_dd": r.get("oos_max_dd"),
+                "n_trades": r.get("n_trades"),
+                "oos_win_rate": r.get("oos_win_rate"),
+                "return_ratio": "",
+            })
+    print("Wrote top20 raw inputs:", top20_csv)
 if __name__ == "__main__":
     main()
 

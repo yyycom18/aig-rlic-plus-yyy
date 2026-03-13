@@ -1,4 +1,5 @@
 from typing import Dict, List, Tuple, Optional, Any
+from pathlib import Path
 import streamlit as st
 import plotly.graph_objects as go
 
@@ -29,24 +30,37 @@ def compute_strategy_survival_scores(
     out = (perf.get("outperformance") or {}) if perf else {}
 
     # 1) Return Advantage: strategy_return / benchmark_return
-    s_ret = _safe_float(strat.get("annualized_return"), 0.0)
-    b_ret = _safe_float(bench.get("annualized_return"), 0.0)
-    # avoid divide by zero: if benchmark 0, use difference scaling
-    if abs(b_ret) < 1e-6:
-        ret_ratio = s_ret  # absolute
+    s_ret = strat.get("annualized_return")
+    b_ret = bench.get("annualized_return")
+    try:
+        s_ret_f = float(s_ret) if s_ret is not None and s_ret != "" else None
+    except Exception:
+        s_ret_f = None
+    try:
+        b_ret_f = float(b_ret) if b_ret is not None and b_ret != "" else None
+    except Exception:
+        b_ret_f = None
+    ret_ratio = None
+    if b_ret_f is None or abs(b_ret_f) < 1e-12:
+        # mark as NA; cannot compute ratio
+        ret_score = None
     else:
-        ret_ratio = s_ret / b_ret
-    # normalize: ratio 1.0 => 3 (mid), scale to 0-5: simple linear with cap
-    ret_score = max(0.0, min(5.0, (ret_ratio * 1.5) + 2.0))
-    scores.append(round(ret_score, 2))
+        ret_ratio = s_ret_f / b_ret_f if s_ret_f is not None else None
+        if ret_ratio is None:
+            ret_score = None
+        else:
+            # normalize: ratio -> score (heuristic)
+            ret_score = max(0.0, min(5.0, (ret_ratio * 1.5) + 2.0))
+    scores.append(ret_score)
     metadata.append(
         {
             "axis": "Return Advantage",
             "metric": "annualized_return",
-            "strategy": s_ret,
-            "benchmark": b_ret,
+            "strategy": s_ret_f,
+            "benchmark": b_ret_f,
             "raw_ratio": ret_ratio,
             "note": "Higher ratio => higher score",
+            "na": ret_score is None,
         }
     )
 
@@ -57,8 +71,13 @@ def compute_strategy_survival_scores(
         sh_ratio = s_sh
     else:
         sh_ratio = s_sh / b_sh
-    sh_score = max(0.0, min(5.0, (sh_ratio * 1.5) + 2.0))
-    scores.append(round(sh_score, 2))
+    sh_score = None
+    if b_sh is None or abs(b_sh) < 1e-12:
+        sh_score = None
+    else:
+        if sh_ratio is not None:
+            sh_score = max(0.0, min(5.0, (sh_ratio * 1.5) + 2.0))
+    scores.append(sh_score)
     metadata.append(
         {
             "axis": "Sharpe Advantage",
@@ -76,8 +95,12 @@ def compute_strategy_survival_scores(
     s_dd_abs = abs(s_dd) if s_dd != 0 else 1e-6
     b_dd_abs = abs(b_dd) if b_dd != 0 else 1e-6
     dd_ratio = b_dd_abs / s_dd_abs
-    dd_score = max(0.0, min(5.0, (dd_ratio * 1.5) + 2.0))
-    scores.append(round(dd_score, 2))
+    dd_score = None
+    if s_dd_abs is None or b_dd_abs is None:
+        dd_score = None
+    else:
+        dd_score = max(0.0, min(5.0, (dd_ratio * 1.5) + 2.0))
+    scores.append(dd_score)
     metadata.append(
         {
             "axis": "Drawdown Control",
@@ -90,8 +113,14 @@ def compute_strategy_survival_scores(
 
     # 4) Consistency: win_rate (0-1) -> scale 0-5
     win = _safe_float(strat.get("win_rate"), strat.get("winrate") or 0.5)
-    win_score = max(0.0, min(5.0, win * 5.0))
-    scores.append(round(win_score, 2))
+    win_score = None
+    if win is not None:
+        try:
+            win_f = float(win)
+            win_score = max(0.0, min(5.0, win_f * 5.0))
+        except Exception:
+            win_score = None
+    scores.append(win_score)
     metadata.append(
         {
             "axis": "Consistency",
@@ -112,7 +141,7 @@ def compute_strategy_survival_scores(
     else:
         # penalty for overtrading: scaled down as trades increase beyond 20 up to 100
         dep_score = max(0.0, 5.0 * max(0.0, 1.0 - ((trades - 20.0) / 80.0)))
-    scores.append(round(dep_score, 2))
+    scores.append(dep_score)
     metadata.append(
         {
             "axis": "Deployability",
@@ -122,13 +151,17 @@ def compute_strategy_survival_scores(
         }
     )
 
-    avg = sum(scores) / len(scores) if scores else 0.0
+    # compute average ignoring None entries
+    numeric = [s for s in scores if s is not None]
+    avg = sum(numeric) / len(numeric) if numeric else 0.0
     return scores, metadata, round(avg, 3)
 
 
-def _radar_figure(scores: List[float], axes: List[str], title: str = "Strategy Survival") -> go.Figure:
+def _radar_figure(scores: List[Optional[float]], axes: List[str], title: str = "Strategy Survival") -> go.Figure:
     # ensure closure
-    r = scores + [scores[0]]
+    # replace None with neutral 2.5 for plotting
+    plot_scores = [(s if s is not None else 2.5) for s in scores]
+    r = plot_scores + [plot_scores[0]]
     theta = axes + [axes[0]]
     fig = go.Figure()
     fig.add_trace(
@@ -136,8 +169,8 @@ def _radar_figure(scores: List[float], axes: List[str], title: str = "Strategy S
             r=r,
             theta=theta,
             fill="toself",
-            fillcolor="rgba(255, 99, 71, 0.25)",
-            line=dict(color="#ff6347", width=2),
+            fillcolor="rgba(102, 126, 234, 0.4)",
+            line=dict(color="#667eea", width=2),
         )
     )
     fig.update_layout(
@@ -156,9 +189,12 @@ def render_strategy_survival_panel(strategy_data: Optional[Dict], study: str = "
     scores, metadata, avg = compute_strategy_survival_scores(strategy_data)
     st.subheader("Strategy Survival — how this indicator performs in strategies")
     st.caption("Radar summarizes how strategies built from this indicator perform vs the benchmark (SPY). Higher scores are better.")
-    # Text summary for screen-readers & quick view
+    # Text summary for screen-readers & quick view (format N/A when score is missing)
+    def fmt_score(s):
+        return f"{s:.2f}/5" if s is not None else "N/A"
+
     st.markdown(
-        "- " + ", ".join([f"**{axes[i]}:** {scores[i]}/5" for i in range(len(axes))])
+        "- " + ", ".join([f"**{axes[i]}:** {fmt_score(scores[i])}" for i in range(len(axes))])
     )
     # Use blue/purple visual language consistent with behavior radar
     fig = _radar_figure(scores, axes, title="Strategy Survival")
@@ -172,32 +208,46 @@ def render_strategy_survival_panel(strategy_data: Optional[Dict], study: str = "
             "These scores are based on annualized return, Sharpe ratio, drawdown, win rate, and trades per year compared to buy-and-hold SPY. "
             "They are scaled to a 0–5 range for quick comparison."
         )
-        for m in metadata:
+        for idx, m in enumerate(metadata):
             # Human-readable formatting per axis
             axis = m.get("axis", "Axis")
             if axis == "Return Advantage":
-                st.markdown(
-                    f"- **Return Advantage:** Strategy annualized return = {m.get('strategy'):.3f}, "
-                    f"benchmark = {m.get('benchmark'):.3f}, ratio = {m.get('raw_ratio'):.3f} → score {scores[0]}/5"
-                )
+                s_strat = m.get('strategy')
+                s_bench = m.get('benchmark')
+                r_raw = m.get('raw_ratio')
+                score_val = scores[0] if len(scores) > 0 else None
+                s_text = f"{s_strat:.3f}" if s_strat is not None else "N/A"
+                b_text = f"{s_bench:.3f}" if s_bench is not None else "N/A"
+                r_text = f"{r_raw:.3f}" if r_raw is not None else "N/A"
+                st.markdown(f"- **Return Advantage:** Strategy annualized return = {s_text}, benchmark = {b_text}, ratio = {r_text} → score {fmt_score(score_val)}")
             elif axis == "Sharpe Advantage":
-                st.markdown(
-                    f"- **Sharpe Advantage:** Strategy Sharpe = {m.get('strategy'):.2f}, "
-                    f"benchmark Sharpe = {m.get('benchmark'):.2f}, ratio = {m.get('raw_ratio'):.2f} → score {scores[1]}/5"
-                )
+                s_strat = m.get('strategy')
+                s_bench = m.get('benchmark')
+                r_raw = m.get('raw_ratio')
+                s_text = f"{s_strat:.2f}" if s_strat is not None else "N/A"
+                b_text = f"{s_bench:.2f}" if s_bench is not None else "N/A"
+                r_text = f"{r_raw:.2f}" if r_raw is not None else "N/A"
+                score_val = scores[1] if len(scores) > 1 else None
+                st.markdown(f"- **Sharpe Advantage:** Strategy Sharpe = {s_text}, benchmark Sharpe = {b_text}, ratio = {r_text} → score {fmt_score(score_val)}")
             elif axis == "Drawdown Control":
-                st.markdown(
-                    f"- **Drawdown Control:** Strategy max drawdown = {m.get('strategy')}, "
-                    f"benchmark max drawdown = {m.get('benchmark')}, ratio = {m.get('raw_ratio'):.2f} → score {scores[2]}/5"
-                )
+                s_strat = m.get('strategy')
+                s_bench = m.get('benchmark')
+                r_raw = m.get('raw_ratio')
+                s_text = f"{s_strat}" if s_strat is not None else "N/A"
+                b_text = f"{s_bench}" if s_bench is not None else "N/A"
+                r_text = f"{r_raw:.2f}" if r_raw is not None else "N/A"
+                score_val = scores[2] if len(scores) > 2 else None
+                st.markdown(f"- **Drawdown Control:** Strategy max drawdown = {s_text}, benchmark max drawdown = {b_text}, ratio = {r_text} → score {fmt_score(score_val)}")
             elif axis == "Consistency":
-                st.markdown(
-                    f"- **Consistency:** Win rate = {m.get('strategy'):.2%} → score {scores[3]}/5"
-                )
+                s_strat = m.get('strategy')
+                score_val = scores[3] if len(scores) > 3 else None
+                s_text = f"{s_strat:.2%}" if s_strat is not None else "N/A"
+                st.markdown(f"- **Consistency:** Win rate = {s_text} → score {fmt_score(score_val)}")
             elif axis == "Deployability":
-                st.markdown(
-                    f"- **Deployability:** Trades/year = {m.get('strategy'):.1f} (optimal 4–20/year) → score {scores[4]}/5"
-                )
+                s_strat = m.get('strategy')
+                score_val = scores[4] if len(scores) > 4 else None
+                s_text = f"{s_strat:.1f}" if s_strat is not None else "N/A"
+                st.markdown(f"- **Deployability:** Trades/year = {s_text} (optimal 4–20/year) → score {fmt_score(score_val)}")
             else:
                 st.markdown(f"- **{axis}:** {m}")
     # Viability rule warning if failed
