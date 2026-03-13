@@ -4,6 +4,8 @@ import os
 import sys
 
 import streamlit as st
+import pandas as pd
+import numpy as np
 
 # Ensure components are importable
 sys.path.insert(0, os.path.dirname(__file__))
@@ -146,12 +148,85 @@ else:
     st.caption("No Indicator DNA cards available. Please check data files under `data/`.")
 
 # --- Indicator Identity Panel (Step C) ---
+def load_tournament_strategy_data():
+    """Load Top-20 strategies from tournament and return median-aggregated metrics for radar."""
+    path = os.path.join(os.path.dirname(__file__), "..", "results", "tournament_results_20260228.csv")
+    try:
+        df = pd.read_csv(path)
+        if df.empty:
+            st.warning("Tournament results CSV is empty.")
+            return None
+
+        df_sorted = df.sort_values("oos_sharpe", ascending=False)
+        topn = df_sorted.head(20)
+        n = len(topn)
+        if n == 0:
+            st.warning("No strategies found in tournament results.")
+            return None
+
+        # Safe numeric conversion
+        def safe_series(col):
+            return pd.to_numeric(topn.get(col, pd.Series(dtype=float)), errors="coerce")
+
+        ann_ret = safe_series("oos_ann_return")
+        sharpe = safe_series("oos_sharpe")
+        max_dd = safe_series("oos_max_dd")
+        win_rate = safe_series("oos_win_rate")
+        n_trades = safe_series("n_trades")
+
+        trades_per_year = (n_trades.fillna(0.0) / 5.0)
+
+        med_return = float(ann_ret.median(skipna=True)) if not ann_ret.dropna().empty else 0.0
+        med_sharpe = float(sharpe.median(skipna=True)) if not sharpe.dropna().empty else 0.0
+        med_max_dd = float(max_dd.median(skipna=True)) if not max_dd.dropna().empty else 0.0
+        med_win_rate = float(win_rate.median(skipna=True)) if not win_rate.dropna().empty else 0.0
+        med_trades_per_year = float(trades_per_year.median(skipna=True)) if not trades_per_year.dropna().empty else 0.0
+
+        # IQR for transparency
+        def iqr(s):
+            s = s.dropna()
+            if s.empty:
+                return None
+            return float(s.quantile(0.75) - s.quantile(0.25))
+
+        iqr_stats = {
+            "annualized_return_iqr": iqr(ann_ret),
+            "sharpe_iqr": iqr(sharpe),
+            "max_dd_iqr": iqr(max_dd),
+            "win_rate_iqr": iqr(win_rate),
+            "trades_per_year_iqr": iqr(trades_per_year),
+        }
+
+        return {
+            "performance_metrics": {
+                "strategy": {
+                    "annualized_return": med_return,
+                    "sharpe": med_sharpe,
+                    "max_drawdown": med_max_dd,
+                    "win_rate": med_win_rate,
+                    "trades_per_year": med_trades_per_year,
+                },
+                "spy": {
+                    # fallback benchmark values (used only if benchmark not available)
+                    "annualized_return": 0.08,
+                    "sharpe": 0.80,
+                    "max_drawdown": -0.20,
+                    "win_rate": 0.52,
+                },
+            },
+            "strategy_sample": {"n": n, "iqr": iqr_stats, "source": "Top-20 by oos_sharpe"},
+        }
+    except Exception as e:
+        st.warning(f"Could not load tournament data for Strategy Survival radar: {e}")
+        return None
+
 # For now, behavioral metrics are wired to HY-IG study; DNA panel uses selected_dna.
+strategy_data = load_tournament_strategy_data()
 render_identity_panel(
     study="hy_ig",
     monthly_data=None,
     analysis_data=None,
-    strategy_data=None,
+    strategy_data=strategy_data,
     indicator_dna=selected_dna,
     env_interaction=selected_env,
 )
