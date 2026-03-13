@@ -405,6 +405,19 @@ def render_identity_panel(
     except Exception as e:
         st.error("Strategy Survival panel failed to render.")
         st.exception(e)
+    # Show sample provenance and dispersion (Top-20 aggregation) if available
+    try:
+        sample = (strategy_data or {}).get("strategy_sample") if strategy_data else None
+        if sample:
+            n = sample.get("n")
+            iqr = sample.get("iqr", {})
+            src = sample.get("source", "Top-20 by oos_sharpe")
+            st.markdown(f"**Sample:** Sourced from {src} (N={n})")
+            with st.expander("Show sample dispersion (IQR) for Top-20", expanded=False):
+                st.write(iqr)
+    except Exception:
+        # Non-critical: do not fail rendering the identity panel if sample display errors
+        pass
 
     # NOTE: Legacy demo section (Strategy Survival radar + Understanding These Dimensions
     # + evidence expanders) has been removed from the UI for the YYY workspace.
