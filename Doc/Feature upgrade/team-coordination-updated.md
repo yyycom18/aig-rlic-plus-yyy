@@ -357,3 +357,23 @@ After completing a major analysis (not after every task), the team lead (Alex) c
 3. SOPs are updated by their respective owners
 4. Team coordination protocol is updated if cross-cutting changes are needed
 5. Learnings are promoted to global experience files if cross-project applicable
+
+## [NEW COMPONENT – Indicator Evaluation Framework]
+
+### Purpose
+Integrate the new Indicator Evaluation Layer into multi-agent workflow.
+
+Artifacts:
+
+- `environment_interaction_scores.json`  
+- `strategy_survival_scores.json`  
+
+### Responsibilities
+- Ensure evaluation-layer tasks are properly assigned  
+- Monitor completion and integration of new component  
+- Maintain clear communication between Research, Data, Econometrics, AppDev, and Visualization Agents  
+
+### Notes
+- Append only  
+- Original SOP preserved  
+- Clearly marked as "[NEW COMPONENT – Indicator Evaluation Framework]"

@@ -383,3 +383,34 @@ Ace is the final integration point — errors from any upstream agent converge h
 4. **Did any upstream handoff cause friction?** Note for next team review
 5. **Distill 1-2 key lessons** and update your memories file at `~/.claude/agents/appdev-ace/memories.md`
 6. If a lesson is **cross-project**, update `~/.claude/agents/appdev-ace/experience.md` too
+
+## [NEW COMPONENT – Indicator Evaluation Framework]
+
+### Purpose
+The Indicator Evaluation Layer provides a structured framework for evaluating how indicators interact with market environments and strategy performance.
+
+It produces two standardized evaluation artifacts:
+- `environment_interaction_scores.json`  
+- `strategy_survival_scores.json`
+
+These outputs allow the system to quantify:
+- how indicators behave under different macro regimes  
+- how indicators support or weaken strategy performance  
+- which indicators remain robust across environments
+
+### Responsibilities of AppDev Agent
+- Integrate the evaluation layer into the Streamlit portal  
+- Normalize and aggregate evaluation scores for radar display  
+- Ensure correct mapping between raw econometric evidence and radar axes  
+- Do not modify upstream data or research results
+
+### Interaction with Other Agents
+- Receives validated data from Data Agent  
+- Uses statistical evidence from Econometrics Agent  
+- Collaborates with Visualization Agent to render radar charts  
+- Works with Research Agent to display narrative context alongside evaluation scores
+
+### Notes
+- The evaluation layer must be appended to the dashboard without overwriting existing functionality  
+- The new component should be clearly marked as "[NEW COMPONENT – Indicator Evaluation Framework]"  
+- This is an additive section; existing SOP content remains unchanged

@@ -427,3 +427,27 @@ Evan both consumes upstream data (from Dana and Ray) and produces model outputs 
 - **Never** submit an ambiguous data request to Dana — specify units, frequency, SA preference, and priority
 - **Never** hand off strategy rules to Ace in model notation — translate to plain English
 - **Never** deliver backtest results as prose — use structured tables and machine-readable files
+
+## [NEW COMPONENT – Indicator Evaluation Framework]
+
+### Purpose
+Provide structured input for evaluation layer scoring.
+
+Artifacts:
+
+- `environment_interaction_scores.json`  
+- `strategy_survival_scores.json`  
+
+### Responsibilities
+- Supply raw statistical evidence required for evaluation-layer score computation  
+- Maintain consistent methods for computing correlation, lead/lag, drawdown, and other metrics  
+- Ensure outputs are reproducible and documented  
+
+### Interaction
+- Pass evidence to AppDev Agent for normalization and radar mapping  
+- Align methodology with Research Agent guidance
+
+### Notes
+- Original SOP fully preserved  
+- New component appended only  
+- Clearly marked as "[NEW COMPONENT – Indicator Evaluation Framework]"

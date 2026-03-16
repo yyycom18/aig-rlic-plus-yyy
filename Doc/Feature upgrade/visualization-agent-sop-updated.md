@@ -549,3 +549,28 @@ Before handing off:
 4. **Handoff friction:** Did Evan's or Dana's handoff format cause friction? Note for next team review
 5. **Distill 1-2 key lessons** and update your memories file at `~/.claude/agents/viz-vera/memories.md`
 6. **Cross-project lessons:** If a lesson is not specific to this analysis (e.g., a general matplotlib technique, a universal chart design principle), update `~/.claude/agents/viz-vera/experience.md` too
+
+## [NEW COMPONENT – Indicator Evaluation Framework]
+
+### Purpose
+Render the evaluation-layer results in the dashboard.
+
+Artifacts:
+
+- `environment_interaction_scores.json`  
+- `strategy_survival_scores.json`  
+
+### Responsibilities
+- Display Environment Interaction Radar  
+- Display Strategy Survival Radar  
+- Ensure consistent visual style and axis normalization  
+- Provide tooltip explanations for new component  
+
+### Interaction
+- Receives normalized scores from AppDev Agent  
+- Displays metrics with narrative from Research Agent  
+
+### Notes
+- Append only  
+- Original SOP preserved  
+- Clearly marked as "[NEW COMPONENT – Indicator Evaluation Framework]"
