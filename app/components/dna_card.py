@@ -85,23 +85,20 @@ def render_dna_card(card: IndicatorDNACard, admin_enabled: bool = True) -> None:
         unsafe_allow_html=True,
     )
 
-    # Header row: title (left) and confidence badge (right), grouped and compact
-    header_col, header_conf = st.columns([8, 1])
-    with header_col:
-        st.subheader(card.indicator_name)
-    with header_conf:
-        if card.confidence:
-            color = _CONFIDENCE_COLORS.get(card.confidence, "#e5e7eb")
-            # Use a single keyboard-focusable button as the interactive confidence pill.
-            btn_key = f"confidence_btn_{card.indicator_name}"
-            label = f"Confidence: {card.confidence}"
-            # Render the button; style is standard Streamlit button but microcopy explains meaning.
-            if st.button(label, key=btn_key):
-                st.session_state[f"evidence_open_{card.indicator_name}"] = True
-            # Microcopy and accessible tooltip text near the button
-            micro = "Confidence reflects evidence consistency; click the badge to view sources. It does not guarantee future performance."
-            st.caption(micro)
-            # For screen readers, the explicit label on the button is sufficient; keep evidence in expander.
+    # Header: title followed immediately by a left-aligned confidence pill and helper text
+    st.subheader(card.indicator_name)
+    if card.confidence:
+        color = _CONFIDENCE_COLORS.get(card.confidence, "#e5e7eb")
+        # Interactive confidence pill remains a single keyboard-focusable control
+        btn_key = f"confidence_btn_{card.indicator_name}"
+        label = f"Confidence: {card.confidence}"
+        # Small top margin to separate from title; keep button left-aligned in the centered container
+        st.markdown('<div style="margin-top:6px;">', unsafe_allow_html=True)
+        if st.button(label, key=btn_key):
+            st.session_state[f"evidence_open_{card.indicator_name}"] = True
+        micro = "Confidence reflects evidence consistency; click the badge to view sources. It does not guarantee future performance."
+        st.caption(micro)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     # Grouped chips and use-case layout (two-column for compactness)
     st.markdown(

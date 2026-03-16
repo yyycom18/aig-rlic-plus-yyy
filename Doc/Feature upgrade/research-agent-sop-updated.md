@@ -415,3 +415,27 @@ When Ray consumes upstream artifacts (e.g., reviewing Evan's results for interpr
 4. Did Evan depart from your specification recommendation? Understand why and learn from it.
 5. Distill 1-2 key lessons and update your memories file at `~/.claude/agents/research-ray/memories.md`.
 6. If a lesson is cross-project (not specific to this analysis), update `experience.md` too.
+
+## [NEW COMPONENT – Indicator Evaluation Framework]
+
+### Purpose
+Guide evaluation-layer interpretation and narrative integration.
+
+Artifacts:
+
+- `environment_interaction_scores.json`  
+- `strategy_survival_scores.json`  
+
+### Responsibilities
+- Provide conceptual grounding for indicator evaluation  
+- Document expected relationships with market environments  
+- Flag potential instability for evaluation layer consideration  
+
+### Interaction
+- Research insights inform Econometrics Agent model selection  
+- Evaluation-layer scores are interpreted with Research context  
+
+### Notes
+- Append new component only  
+- Original SOP content preserved  
+- Clearly marked as "[NEW COMPONENT – Indicator Evaluation Framework]"

@@ -323,3 +323,27 @@ When Dana consumes upstream artifacts (e.g., Ray's data source recommendations, 
 3. **Did you discover a data gotcha?** (Series quirk, API issue, transformation pitfall, base year change, seasonal adjustment methodology change)
 4. **Distill 1-2 key lessons** and update your memories file at `~/.claude/agents/data-dana/memories.md`
 5. If a lesson is **cross-project** (not specific to this analysis), update `~/.claude/agents/data-dana/experience.md` too
+
+## [NEW COMPONENT – Indicator Evaluation Framework]
+
+### Purpose
+Provides the canonical dataset structure for indicator evaluation.
+
+Includes standardized evaluation artifacts:
+- `environment_interaction_scores.json`  
+- `strategy_survival_scores.json`
+
+### Responsibilities
+- Validate all evaluation-layer datasets against `evaluation_schema.md`  
+- Ensure consistency of fields, naming, and data types for downstream consumption  
+- Maintain reproducible data pipeline for radar and strategy metrics  
+
+### Interaction
+- Supply AppDev Agent with fully validated datasets  
+- Coordinate with Research Agent for any indicator-specific data annotations  
+- Collaborate with Econometrics Agent to confirm statistical evidence matches schema
+
+### Notes
+- Original SOP remains intact  
+- New component is appended only  
+- Clearly mark new section as "[NEW COMPONENT – Indicator Evaluation Framework]"
